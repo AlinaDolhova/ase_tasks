@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace CategoryService.Model
+namespace CatalogService.Model
 {
     public class Category
     {

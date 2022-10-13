@@ -1,5 +1,4 @@
-﻿using CategoryService.Model;
-using System;
+﻿using System;
 
 namespace CatalogService.Model
 {

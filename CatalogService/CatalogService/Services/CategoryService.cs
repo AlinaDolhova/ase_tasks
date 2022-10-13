@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CatalogService.BLL.Interfaces;
 using CatalogService.DAL.Interfaces;
-using CategoryService.Model;
+using CatalogService.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,15 +22,7 @@ namespace CatalogService.BLL.Services
 
         public async Task AddAsync(Category item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException("Category can't be null");
-            }
-
-            if (string.IsNullOrEmpty(item.Name))
-            {
-                throw new ArgumentException("Category name can't be empty");
-            }
+            Validate(item);
 
             var categoryToInsert = mapper.Map<DAL.Models.Category>(item);
             await this.categoryRepository.AddAsync(categoryToInsert);
@@ -69,19 +61,24 @@ namespace CatalogService.BLL.Services
                 throw new KeyNotFoundException("Category with such id does not exist");
             }
 
-            if (item == null)
-            {
-                throw new ArgumentNullException("Category can't be null");
-            }
-
-            if (string.IsNullOrEmpty(item.Name))
-            {
-                throw new ArgumentException("Category name can't be empty");
-            }
+            Validate(item);
 
             mapper.Map(item, category);
 
             await categoryRepository.UpdateAsync(category);
+        }
+
+        private void Validate(Category category)
+        {
+            if (null == category)
+            {
+                throw new ArgumentNullException("Category can't be null");
+            }
+
+            if (string.IsNullOrEmpty(category.Name))
+            {
+                throw new ArgumentException("Category name can't be empty");
+            }
         }
     }
 }
