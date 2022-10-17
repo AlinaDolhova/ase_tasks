@@ -68,6 +68,12 @@ namespace CatalogService.BLL.Services
             await itemRepository.UpdateAsync(itemFromDb);
         }
 
+        public async Task<IEnumerable<Item>> GetAsync(Guid categoryId, int page, int perPage)
+        {
+            var skipValue = (page + 1) * perPage;
+            return (await itemRepository.GetAllAsync(x => x.CategoryId == categoryId, take: perPage, skip: skipValue)).Select(x => mapper.Map<Item>(x));
+        }
+
         private void ValidateItem(Item item)
         {
             if (null == item)

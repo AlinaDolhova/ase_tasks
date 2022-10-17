@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CatalogService.Model
 {
@@ -11,5 +12,7 @@ namespace CatalogService.Model
         public string ImageUrl { get; set; }
 
         public Guid? ParentCategoryId { get; set; }
+
+        public IEnumerable<Guid> Items { get; set; }
     }
 }

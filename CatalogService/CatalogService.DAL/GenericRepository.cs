@@ -1,8 +1,10 @@
 ﻿using CatalogService.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,9 +37,19 @@ namespace CatalogService.DAL
             await this.UpdateAsync(entity);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
+        Func<IQueryable<T>, IOrderedQueryable<T>> order = null,
+        Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+        int skip = 0, int take = int.MaxValue)
         {
-            return await this.entities.Where(x => !x.IsDeleted).ToListAsync();
+            IQueryable<T> query = this.entities.Where(x => !x.IsDeleted);
+
+            query = skip == 0 ? query.Take(take) : query.Skip(skip).Take(take);
+            query = filter is null ? query : query.Where(filter);
+            query = order is null ? query : order(query);
+            query = include is null ? query : include(query);
+
+            return await query.ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(Guid id)

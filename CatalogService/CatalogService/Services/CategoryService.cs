@@ -2,6 +2,7 @@
 using CatalogService.BLL.Interfaces;
 using CatalogService.DAL.Interfaces;
 using CatalogService.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace CatalogService.BLL.Services
         public CategoryService(IGenericRepository<DAL.Models.Category> categoryRepo, IMapper mapper)
         {
             this.categoryRepository = categoryRepo;
-            this.mapper = mapper;
+            this.mapper = mapper;           
         }
 
         public async Task AddAsync(Category item)
@@ -41,7 +42,7 @@ namespace CatalogService.BLL.Services
 
         public async Task<Category> GetAsync(Guid id)
         {
-            var category = await categoryRepository.GetByIdAsync(id);
+            var category = await categoryRepository.GetAllAsync(x => x.Id == id, include: x => x.Include(t => t.Items));
 
             if (category != null)
             {
