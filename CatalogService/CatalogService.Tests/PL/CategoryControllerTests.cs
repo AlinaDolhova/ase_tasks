@@ -33,51 +33,93 @@ namespace CatalogService.Tests.PL
         }
 
         [Test]
-        public void CategoryController_GetAsync_WithId_OK()
+        public async Task CategoryController_GetAsync_WithId_OK()
         {
+            var id = Guid.NewGuid();
+            categoryServiceMock.Setup(x => x.GetAsync(id)).ReturnsAsync(new Model.Category());
+            categoryController = new CategoryController(categoryServiceMock.Object);
 
+            var okResult = (await categoryController.GetAsync(id));
+
+            Assert.True(okResult.Result is OkObjectResult);
         }
 
         [Test]
-        public void CategoryController_GetAsync_WithId_NotFound()
+        public async Task CategoryController_GetAsync_WithId_NotFound()
         {
+            var id = Guid.NewGuid();
+            categoryController = new CategoryController(categoryServiceMock.Object);
 
+            var result = (await categoryController.GetAsync(id));
+
+            Assert.True(result.Result is NotFoundObjectResult);
         }
 
         [Test]
-        public void CategoryController_AddCategory_OK()
+        public async Task CategoryController_AddCategory_OK()
         {
+            categoryController = new CategoryController(categoryServiceMock.Object);
 
+            var result = await categoryController.AddAsync(new Model.Category());
+
+            Assert.True(result is OkObjectResult);
         }
 
         [Test]
-        public void CategoryController_AddCategory_BadRequest()
+        public async Task CategoryController_AddCategory_BadRequest()
         {
+            categoryServiceMock.Setup(x => x.AddAsync(It.IsAny<Model.Category>())).Throws(new ArgumentException());
+            categoryController = new CategoryController(categoryServiceMock.Object);
 
+            var result = await categoryController.AddAsync(new Model.Category());
+
+            Assert.True(result is BadRequestResult);
         }
 
         [Test]
-        public void CategoryController_UpdateCategory_OK()
+        public async Task CategoryController_UpdateCategory_OK()
         {
+            var id = Guid.NewGuid();
+            categoryController = new CategoryController(categoryServiceMock.Object);
 
+            var result = await categoryController.UpdateAsync(id, new Model.Category());
+
+            Assert.True(result is OkObjectResult);
         }
 
         [Test]
-        public void CategoryController_UpdateCategory_BadRequest()
+        public async Task CategoryController_UpdateCategory_BadRequest()
         {
+            var id = Guid.NewGuid();
+            categoryServiceMock.Setup(x => x.AddAsync(It.IsAny<Model.Category>())).Throws(new ArgumentException());
+            categoryController = new CategoryController(categoryServiceMock.Object);
 
+            var result = await categoryController.UpdateAsync(id, new Model.Category());
+
+            Assert.True(result is BadRequestObjectResult);
         }
 
         [Test]
-        public void CategoryController_DeleteCategory_NotFound()
+        public async Task CategoryController_DeleteCategory_NotFound()
         {
+            var id = Guid.NewGuid();
+            categoryServiceMock.Setup(x => x.DeleteAsync(id)).Throws(new KeyNotFoundException());
+            categoryController = new CategoryController(categoryServiceMock.Object);
 
+            var result = await categoryController.DeleteAsync(id);
+
+            Assert.True(result is NotFoundObjectResult);
         }
 
         [Test]
-        public void CategoryController_DeleteCategory_OK()
+        public async Task CategoryController_DeleteCategory_OK()
         {
+            var id = Guid.NewGuid();           
+            categoryController = new CategoryController(categoryServiceMock.Object);
 
+            var result = await categoryController.DeleteAsync(id);
+
+            Assert.True(result is OkObjectResult);
         }
     }
 }

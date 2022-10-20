@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace CatalogService.API.Controllers
@@ -20,28 +21,69 @@ namespace CatalogService.API.Controllers
             this.itemService = itemService;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<Item>> GetAsync(Guid categoryId, int page, int perPage)
+        [HttpGet(Name = "GetAllItemsByCategoryId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Item>>> GetAsync(Guid categoryId, int page = 0, int perPage = 10)
         {
-            return await itemService.GetAsync();
+            return Ok(await itemService.GetAsync(categoryId, page, perPage));
         }
 
-        [HttpPost]
-        public async Task AddAsync(Item item)
+        [HttpPost(Name = "AddItem")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> AddAsync(Item item)
         {
-            await itemService.AddAsync(item);
+            try
+            {
+                item.Id = Guid.NewGuid();
+                await itemService.AddAsync(item);
+
+                return CreatedAtAction(nameof(GetAsync), new { id = item.Id }, item);
+            }
+            catch (Exception ex) when (ex is ArgumentException ||
+                               ex is ArgumentNullException)
+            {
+
+                return BadRequest(ex);
+            }
         }
 
-        [HttpPatch]
-        public async Task UpdateAsync(Guid id, Item item)
+        [HttpPatch("{id}", Name = "UpdateItem")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UpdateAsync(Guid id, Item item)
         {
-            await itemService.UpdateAsync(id, item);
+            try
+            {
+                await itemService.UpdateAsync(id, item);
+
+                return Ok();
+            }
+            catch (Exception ex) when (ex is ArgumentException ||
+                               ex is ArgumentNullException)
+            {
+
+                return BadRequest(ex);
+            }
         }
 
-        [HttpDelete]
-        public async Task DeleteAsync(Guid id)
+        [HttpDelete("{id}", Name = "DeleteItem")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
-            await itemService.DeleteAsync(id);
+            try
+            {
+                await itemService.DeleteAsync(id);
+                return Ok();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex);
+            }
         }
     }
 }

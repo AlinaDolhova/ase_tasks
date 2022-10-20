@@ -39,14 +39,14 @@ namespace CatalogService.API.Controllers
                 return NotFound();
             }
 
-            return Ok(await categoryService.GetAsync(id));
+            return Ok(result);
         }
 
         [HttpPost(Name = "AddCategory")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddAsync(Category category)
+        public async Task<ActionResult> AddAsync(Category category)
         {
             try
             {
