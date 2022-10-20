@@ -52,7 +52,7 @@ namespace CatalogService.Tests.PL
 
             var result = (await categoryController.GetAsync(id));
 
-            Assert.True(result.Result is NotFoundObjectResult);
+            Assert.True(result.Result is NotFoundResult);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace CatalogService.Tests.PL
 
             var result = await categoryController.AddAsync(new Model.Category());
 
-            Assert.True(result is OkObjectResult);
+            Assert.True(result is Microsoft.AspNetCore.Mvc.CreatedAtActionResult);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace CatalogService.Tests.PL
 
             var result = await categoryController.AddAsync(new Model.Category());
 
-            Assert.True(result is BadRequestResult);
+            Assert.True(result is BadRequestObjectResult);
         }
 
         [Test]
@@ -84,14 +84,14 @@ namespace CatalogService.Tests.PL
 
             var result = await categoryController.UpdateAsync(id, new Model.Category());
 
-            Assert.True(result is OkObjectResult);
+            Assert.True(result is OkResult);
         }
 
         [Test]
         public async Task CategoryController_UpdateCategory_BadRequest()
         {
             var id = Guid.NewGuid();
-            categoryServiceMock.Setup(x => x.AddAsync(It.IsAny<Model.Category>())).Throws(new ArgumentException());
+            categoryServiceMock.Setup(x => x.UpdateAsync(id, It.IsAny<Model.Category>())).Throws(new ArgumentException());
             categoryController = new CategoryController(categoryServiceMock.Object);
 
             var result = await categoryController.UpdateAsync(id, new Model.Category());
@@ -119,7 +119,7 @@ namespace CatalogService.Tests.PL
 
             var result = await categoryController.DeleteAsync(id);
 
-            Assert.True(result is OkObjectResult);
+            Assert.True(result is OkResult);
         }
     }
 }
