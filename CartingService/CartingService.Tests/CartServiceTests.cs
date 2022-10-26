@@ -49,13 +49,13 @@ namespace CartingService.Tests
         public void AddItemToCart_AddsNewItemToCart()
         {
             var cartId = 1;
-            var itemId = 2;
+            var item = new CartItem { Id = 2 };
             var cart = new Cart { Id = cartId, CartItems = new List<CartItem> { new CartItem() { Id = 3, Quantity = 1 } } };
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
 
             cartingService = new CartService(cartRepo.Object);
-            cartingService.AddItemToCart(cartId, itemId);
+            cartingService.AddItemToCart(cartId, item);
 
             cartRepo.Verify(x => x.Upsert(It.Is<Cart>(cart => cart.CartItems.Count == 2 && cart.CartItems.All(cartItem => cartItem.Quantity == 1))));
         }
@@ -64,13 +64,13 @@ namespace CartingService.Tests
         public void AddItemToCart_UpdatesItemsCount()
         {
             var cartId = 1;
-            var itemId = 2;
-            var cart = new Cart { Id = cartId, CartItems = new List<CartItem> { new CartItem() { Id = itemId, Quantity = 1 } } };
+            var item = new CartItem { Id = 2 };
+            var cart = new Cart { Id = cartId, CartItems = new List<CartItem> { new CartItem() { Id = item.Id, Quantity = 1 } } };
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
 
             cartingService = new CartService(cartRepo.Object);
-            cartingService.AddItemToCart(cartId, itemId);
+            cartingService.AddItemToCart(cartId, item);
 
             cartRepo.Verify(x => x.Upsert(It.Is<Cart>(cart => cart.CartItems.Count == 1 && cart.CartItems.Single().Quantity == 2)));
         }
@@ -79,10 +79,10 @@ namespace CartingService.Tests
         public void AddItemToCart_CreatesNewCartIfThereIsNone()
         {
             var cartId = 1;
-            var itemId = 2;
+            var item = new CartItem { Id = 2 };
 
             cartingService = new CartService(cartRepo.Object);
-            cartingService.AddItemToCart(cartId, itemId);
+            cartingService.AddItemToCart(cartId, item);
 
             cartRepo.Verify(x => x.Insert(It.Is<Cart>(cart => cart.Id == 1 && cart.CartItems.Count == 1 && cart.CartItems.Single().Quantity == 1)));
         }

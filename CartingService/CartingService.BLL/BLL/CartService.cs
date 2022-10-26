@@ -14,16 +14,16 @@ namespace CartingService.BLL
             this.cartRepository = cartRepository;
         }
 
-        public void AddItemToCart(int cartId, int itemId)
+        public void AddItemToCart(int cartId, CartItem item)
         {
             var cart = cartRepository.GetCartById(cartId);
             if (cart != null)
             {
-                var cartItem = cart.CartItems.FirstOrDefault(x => x.Id == itemId);
+                var cartItem = cart.CartItems.FirstOrDefault(x => x.Id == item.Id);
                 if (cartItem == null)
                 {
                     // TODO: Get more info about item from another service? 
-                    cart.CartItems.Add(new CartItem { Id = itemId, Quantity = 1 });
+                    cart.CartItems.Add(item);
                 }
                 else
                 {
@@ -34,7 +34,7 @@ namespace CartingService.BLL
             }
             else
             {
-                cartRepository.Insert(new Cart { Id = cartId, CartItems = new List<CartItem> { new CartItem { Id = itemId, Quantity = 1 } } });
+                cartRepository.Insert(new Cart { Id = cartId, CartItems = new List<CartItem> { item } });
             }
         }
 

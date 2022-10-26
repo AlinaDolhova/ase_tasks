@@ -7,7 +7,7 @@ namespace CartingService.BLL
     {
         IEnumerable<CartItem> GetCartItems(int cartId);
 
-        void AddItemToCart(int cartId, int itemId);
+        void AddItemToCart(int cartId, CartItem item);
 
         void RemoveItemFromCart(int cartId, int itemId);
     }
