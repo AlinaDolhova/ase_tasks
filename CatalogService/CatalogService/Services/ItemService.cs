@@ -13,11 +13,13 @@ namespace CatalogService.BLL.Services
     {
         private readonly IGenericRepository<DAL.Models.Item> itemRepository;
         private readonly IMapper mapper;
+        private readonly IMessagingService messagingService;
 
-        public ItemService(IGenericRepository<DAL.Models.Item> categoryRepo, IMapper mapper)
+        public ItemService(IGenericRepository<DAL.Models.Item> categoryRepo, IMapper mapper, IMessagingService messagingService)
         {
             this.itemRepository = categoryRepo;
             this.mapper = mapper;
+            this.messagingService = messagingService;
         }
 
         public async Task AddAsync(Item item)
@@ -62,6 +64,11 @@ namespace CatalogService.BLL.Services
             }
 
             ValidateItem(item);
+
+            if (item.Money != itemFromDb.Money || item.Name != itemFromDb.Name)
+            {
+                await this.messagingService.SendUpdateMessageAsync(new ItemUpdatedMessage { Id = item.Id, Name = item.Name, Price = item.Money });
+            }
 
             mapper.Map(item, itemFromDb);
 

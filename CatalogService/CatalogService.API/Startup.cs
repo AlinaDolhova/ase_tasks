@@ -16,6 +16,7 @@ using CatalogService.BLL.Services;
 using CatalogService.DAL.Interfaces;
 using RiskFirst.Hateoas;
 using CatalogService.Model;
+using Azure.Messaging.ServiceBus;
 
 namespace CatalogService.API
 {
@@ -36,10 +37,21 @@ namespace CatalogService.API
 
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IMessagingService, MessagingService>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            var messageBusConnectionString = Configuration.GetConnectionString("ServiceBus");
+            var clientOptions = new ServiceBusClientOptions()
+            {
+                TransportType = ServiceBusTransportType.AmqpWebSockets
+            };
+
+            services.AddSingleton(typeof(ServiceBusClient), new ServiceBusClient(messageBusConnectionString, clientOptions));
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddControllers();
+            services.AddControllers();          
+            
+
             services.AddSwaggerDocument();
 
             services.AddLinks(config =>
@@ -84,8 +96,6 @@ namespace CatalogService.API
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
-
-            app.UseMvc();
         }
     }
 }

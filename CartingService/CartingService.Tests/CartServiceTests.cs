@@ -3,11 +3,13 @@ using CartingService.DAL.Interfaces;
 using CartingService.Models;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CartingService.Tests
 {
+    
     public class CartServiceTests
     {
         private Mock<ICartRepository> cartRepo;
@@ -49,8 +51,8 @@ namespace CartingService.Tests
         public void AddItemToCart_AddsNewItemToCart()
         {
             var cartId = 1;
-            var item = new CartItem { Id = 2 };
-            var cart = new Cart { Id = cartId, CartItems = new List<CartItem> { new CartItem() { Id = 3, Quantity = 1 } } };
+            var item = new CartItem { Id = Guid.NewGuid(), Quantity = 1 };
+            var cart = new Cart { Id = cartId, CartItems = new List<CartItem> { new CartItem() { Id = Guid.NewGuid(), Quantity = 1 } } };
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
 
@@ -64,7 +66,7 @@ namespace CartingService.Tests
         public void AddItemToCart_UpdatesItemsCount()
         {
             var cartId = 1;
-            var item = new CartItem { Id = 2 };
+            var item = new CartItem { Id = Guid.NewGuid() };
             var cart = new Cart { Id = cartId, CartItems = new List<CartItem> { new CartItem() { Id = item.Id, Quantity = 1 } } };
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
@@ -79,7 +81,7 @@ namespace CartingService.Tests
         public void AddItemToCart_CreatesNewCartIfThereIsNone()
         {
             var cartId = 1;
-            var item = new CartItem { Id = 2 };
+            var item = new CartItem { Id = Guid.NewGuid() };
 
             cartingService = new CartService(cartRepo.Object);
             cartingService.AddItemToCart(cartId, item);
@@ -91,7 +93,7 @@ namespace CartingService.Tests
         public void RemoveItemFromCart_DecreasesCountOfItemInCart()
         {
             var cartId = 1;          
-            var itemId = 2;
+            var itemId = Guid.NewGuid();
             var cart = new Cart { Id = cartId, CartItems = new List<CartItem> { new CartItem() { Id = itemId, Quantity = 2 } } };
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
@@ -106,8 +108,8 @@ namespace CartingService.Tests
         public void RemoveItemFromCart_RemovesItemFromCart()
         {
             var cartId = 1;
-            var remainingItemId = 3;
-            var itemId = 2;
+            var remainingItemId = Guid.NewGuid();
+            var itemId = Guid.NewGuid();
             var cart = new Cart { Id = cartId, CartItems = new List<CartItem> { new CartItem() { Id = itemId, Quantity = 1 }, new CartItem() { Id = remainingItemId, Quantity = 1 } } };
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
@@ -122,7 +124,7 @@ namespace CartingService.Tests
         public void RemoveItemFromCart_RemovesCartIfItsEmpty()
         {
             var cartId = 1;
-            var itemId = 2;
+            var itemId = Guid.NewGuid();
             var cart = new Cart { Id = cartId, CartItems = new List<CartItem> { new CartItem() { Id = itemId, Quantity = 1 } } };
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);

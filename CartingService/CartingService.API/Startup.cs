@@ -1,4 +1,7 @@
+using Azure.Messaging.ServiceBus;
+using Azure.Messaging.ServiceBus.Administration;
 using CartingService.BLL;
+using CartingService.BLL.Interfaces;
 using CartingService.DAL;
 using CartingService.DAL.Interfaces;
 using LiteDB;
@@ -35,8 +38,19 @@ namespace CartingService.API
 
             services.AddSingleton<ILiteDatabase, LiteDatabase>(x => new LiteDatabase(connectionString));
 
+            var messageBusConnectionString = Configuration.GetConnectionString("ServiceBus");
+            var clientOptions = new ServiceBusClientOptions()
+            {
+                TransportType = ServiceBusTransportType.AmqpWebSockets
+            };
+
+            services.AddSingleton(typeof(ServiceBusClient), new ServiceBusClient(messageBusConnectionString, clientOptions));
+            services.AddSingleton(typeof(ServiceBusAdministrationClient), new ServiceBusAdministrationClient(messageBusConnectionString));
+
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<ICartRepository, CartReporitory>();
+            services.AddScoped<IConfigurationService, ConfigurationService>();
+            services.AddScoped<IServiceBusConsumerService, ServiceBusConsumerService>();
 
             services.AddApiVersioning(options =>
             {
@@ -81,7 +95,11 @@ namespace CartingService.API
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseMvc();
+           
+
+            var bus = app.ApplicationServices.GetService<IServiceBusConsumerService>();
+            bus.PrepareFiltersAndHandleMessages().GetAwaiter().GetResult();
+
         }
     }
 }

@@ -42,7 +42,8 @@ namespace CatalogService.BLL.Services
 
         public async Task<Category> GetAsync(Guid id)
         {
-            var category = await categoryRepository.GetAllAsync(x => x.Id == id, include: x => x.Include(t => t.Items));
+            var categoriesList = await categoryRepository.GetAllAsync(x => x.Id == id, include: x => x.Include(t => t.Items));
+            var category = categoriesList.FirstOrDefault();
 
             if (category != null)
             {

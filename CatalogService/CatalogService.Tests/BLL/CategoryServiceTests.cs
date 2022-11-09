@@ -2,10 +2,13 @@ using AutoMapper;
 using CatalogService.BLL.Services;
 using CatalogService.DAL.Interfaces;
 using CatalogService.DAL.Models;
+using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace CatalogService.Tests
@@ -85,7 +88,8 @@ namespace CatalogService.Tests
         {
             var testId = Guid.NewGuid();
 
-            repoMock.Setup(x => x.GetByIdAsync(testId)).ReturnsAsync(new Category { Id = testId, Name = "old" });
+            repoMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<Category, bool>>>(), It.IsAny<Func<IQueryable<Category>, IOrderedQueryable<Category>>>(),
+                It.IsAny<Func<IQueryable<Category>, IIncludableQueryable<Category, object>>>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(new List<Category> { new Category { Id = testId, Name = "old" } });
             categoryService = new CategoryService(repoMock.Object, mapperMock.Object);
 
             await categoryService.DeleteAsync(testId);
@@ -96,9 +100,9 @@ namespace CatalogService.Tests
 
         [Test]
         public void DeleteAsync_WontDeleteNotExistingCategory()
-        {            
+        {
             var testId = Guid.NewGuid();
-            
+
             categoryService = new CategoryService(repoMock.Object, mapperMock.Object);
 
             Assert.ThrowsAsync<KeyNotFoundException>(() => categoryService.DeleteAsync(testId));

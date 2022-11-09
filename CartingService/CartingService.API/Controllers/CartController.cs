@@ -77,7 +77,7 @@ namespace CartingService.API.Controllers
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]        
 
-        public ActionResult Delete(string cartKey, int itemId)
+        public ActionResult Delete(string cartKey, Guid itemId)
         {
             this.cartService.RemoveItemFromCart(Convert.ToInt32(cartKey), itemId);
             return new OkResult();

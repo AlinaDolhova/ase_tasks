@@ -1,4 +1,5 @@
 ﻿using CartingService.Models;
+using System;
 using System.Collections.Generic;
 
 namespace CartingService.DAL.Interfaces
@@ -10,5 +11,9 @@ namespace CartingService.DAL.Interfaces
         void Insert(Cart cart);
 
         void Delete(int cartId);
+
+        IEnumerable<Cart> GetCartsByItemId(Guid itemId);
+
+        void UpsertAll(IEnumerable<Cart> carts);
     }
 }

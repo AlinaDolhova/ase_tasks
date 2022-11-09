@@ -1,5 +1,6 @@
 ﻿using CartingService.DAL.Interfaces;
 using CartingService.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,6 +17,11 @@ namespace CartingService.BLL
 
         public void AddItemToCart(int cartId, CartItem item)
         {
+            if (item.Quantity == 0)
+            {
+                item.Quantity++;
+            }
+
             var cart = cartRepository.GetCartById(cartId);
             if (cart != null)
             {
@@ -43,7 +49,7 @@ namespace CartingService.BLL
             return cartRepository.GetCartById(cartId)?.CartItems;
         }
 
-        public void RemoveItemFromCart(int cartId, int itemId)
+        public void RemoveItemFromCart(int cartId, Guid itemId)
         {
             var cart = cartRepository.GetCartById(cartId);
             if (cart != null)
@@ -70,6 +76,20 @@ namespace CartingService.BLL
                     }
                 }
             }
+        }
+
+        public void UpdateItemInCarts(Guid itemId, string name, decimal price)
+        {
+            var cartsWithItem = this.cartRepository.GetCartsByItemId(itemId);
+
+            foreach(var cart in cartsWithItem)
+            {
+                var item = cart.CartItems.Where(x => x.Id == itemId).First();
+                item.Price = price;
+                item.Name = name;
+            }
+
+            this.cartRepository.UpsertAll(cartsWithItem);
         }
     }
 }
