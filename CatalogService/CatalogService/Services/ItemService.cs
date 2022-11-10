@@ -77,7 +77,7 @@ namespace CatalogService.BLL.Services
 
         public async Task<IEnumerable<Item>> GetAsync(Guid categoryId, int page, int perPage)
         {
-            var skipValue = (page + 1) * perPage;
+            var skipValue = page * perPage;
             return (await itemRepository.GetAllAsync(x => x.CategoryId == categoryId, take: perPage, skip: skipValue)).Select(x => mapper.Map<Item>(x));
         }
 

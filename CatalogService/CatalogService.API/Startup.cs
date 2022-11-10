@@ -32,6 +32,8 @@ namespace CatalogService.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+
             var connectionString = Configuration.GetConnectionString("CatalogDbContext");
             services.AddDbContext<CatalogDbContext>(options => options.UseSqlServer(connectionString));
 
@@ -48,9 +50,6 @@ namespace CatalogService.API
 
             services.AddSingleton(typeof(ServiceBusClient), new ServiceBusClient(messageBusConnectionString, clientOptions));
             services.AddAutoMapper(typeof(Startup));
-
-            services.AddControllers();          
-            
 
             services.AddSwaggerDocument();
 
@@ -83,16 +82,15 @@ namespace CatalogService.API
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthorization();
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllers();
-            //});
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.UseOpenApi();
             app.UseSwaggerUi3();

@@ -1,14 +1,18 @@
 ﻿using CartingService.BLL.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Text;
+using Microsoft.Extensions.Configuration;
+
 
 namespace CartingService.BLL
 {
     public class ConfigurationService : IConfigurationService
     {
-        public string TopicPath => ConfigurationManager.AppSettings.Get("topic_path");
-        public string SubscriptionName => ConfigurationManager.AppSettings.Get("subscription_name");
+        private readonly IConfiguration configuration;
+        public ConfigurationService(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
+        public string TopicPath => configuration["topic_path"];
+        public string SubscriptionName => configuration["subscription_name"];
     }
 }

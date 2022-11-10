@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CatalogService.BLL.Interfaces;
 using CatalogService.BLL.Services;
 using CatalogService.DAL.Interfaces;
 using CatalogService.DAL.Models;
@@ -16,12 +17,14 @@ namespace CatalogService.Tests
         private Mock<IGenericRepository<Item>> repoMock;
         private BLL.Services.ItemService itemService;
         private Mock<IMapper> mapperMock;
+        private Mock<IMessagingService> messagingServiceMock;
 
         [SetUp]
         public void Setup()
         {
             repoMock = new Mock<IGenericRepository<Item>>();
             mapperMock = new Mock<IMapper>();
+            messagingServiceMock = new Mock<IMessagingService>();
 
             mapperMock.Setup(x => x.Map<Model.Item>(It.IsAny<Category>())).Returns((Item x) => new Model.Item { Id = x.Id, Name = x.Name, ImageUrl = x.ImageUrl, Amount = x.Amount, Money = x.Money, CategoryId = x.CategoryId });
             mapperMock.Setup(x => x.Map<Item>(It.IsAny<Model.Item>())).Returns((Model.Item x) => new Item { Id = x.Id, Name = x.Name, ImageUrl = x.ImageUrl, Amount = x.Amount, Money = x.Money, CategoryId = x.CategoryId });
@@ -33,7 +36,7 @@ namespace CatalogService.Tests
         public async Task AddAsync_AddsItem()
         {
             var item = new Model.Item { Name = "test", CategoryId = Guid.NewGuid(), Money = 1, Amount = 1 };
-            itemService = new ItemService(repoMock.Object, mapperMock.Object);
+            itemService = new ItemService(repoMock.Object, mapperMock.Object, messagingServiceMock.Object);
             await itemService.AddAsync(item);
 
             repoMock.Verify(x => x.AddAsync(It.Is<Item>(x => x.Name == item.Name)));
@@ -43,7 +46,7 @@ namespace CatalogService.Tests
         public void AddAsync_ValidatesName()
         {
             var item = new Model.Item();
-            itemService = new ItemService(repoMock.Object, mapperMock.Object);
+            itemService = new ItemService(repoMock.Object, mapperMock.Object, messagingServiceMock.Object);
             Assert.ThrowsAsync<ArgumentException>(() => itemService.AddAsync(item));
 
         }
@@ -51,7 +54,7 @@ namespace CatalogService.Tests
         [Test]
         public void AddAsync_ValidatesNullCategory()
         {
-            itemService = new ItemService(repoMock.Object, mapperMock.Object);
+            itemService = new ItemService(repoMock.Object, mapperMock.Object, messagingServiceMock.Object);
             Assert.ThrowsAsync<ArgumentNullException>(() => itemService.AddAsync(null));
         }
 

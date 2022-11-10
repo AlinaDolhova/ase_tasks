@@ -14,9 +14,8 @@ namespace CatalogService.DAL.Models
 
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; }
+        public string Name { get; set; }        
         
-        [Url]
         public string ImageUrl { get; set; }
 
         public Guid? ParentCategoryId { get; set; }

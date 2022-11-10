@@ -39,7 +39,6 @@ namespace CartingService.BLL
             this.cartService = cartService;
             this.configurationService = configurationService;
         }
-
         public async Task PrepareFiltersAndHandleMessages()
         {
 

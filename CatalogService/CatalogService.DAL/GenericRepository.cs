@@ -25,7 +25,14 @@ namespace CatalogService.DAL
         public async Task AddAsync(T entity)
         {
             this.entities.Add(entity);
-            await this.dbContext.SaveChangesAsync();
+            try
+            {
+                await this.dbContext.SaveChangesAsync();
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
 
         }
 
