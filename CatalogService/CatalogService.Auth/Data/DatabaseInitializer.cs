@@ -2,6 +2,7 @@
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace CatalogService.Auth.Data
 {
     public static class DatabaseInitializer
     {
-        public static void PopulateIdentityServer(IApplicationBuilder app)
+        public async static void PopulateIdentityServer(IApplicationBuilder app, ApplicationDbContext dbContext)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
@@ -49,24 +50,11 @@ namespace CatalogService.Auth.Data
 
                     context.SaveChanges();
                 }
-                
 
-                //var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                //var manager = roleManager.FindByNameAsync("manager").GetAwaiter().GetResult(); 
-                //if (manager == null)
-                //{
-                //    manager = new IdentityRole { Name = "manager" };
-                //    _ = roleManager.CreateAsync(manager).GetAwaiter().GetResult();
-                //}
-
-                //var buyer = roleManager.FindByNameAsync("buyer").GetAwaiter().GetResult();
-                //if (buyer == null)
-                //{
-                //    buyer = new IdentityRole { Name = "buyer" };
-                //    _ = roleManager.CreateAsync(buyer).GetAwaiter().GetResult();
-                //}
-
+                var roleStore = new RoleStore<IdentityRole>(dbContext);
+                await roleStore.CreateAsync(new IdentityRole("manager"));
+                await roleStore.CreateAsync(new IdentityRole("buyer"));
             }
         }
     }

@@ -59,7 +59,7 @@ namespace CatalogService.Auth
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context)
         {
-            DatabaseInitializer.PopulateIdentityServer(app);
+            DatabaseInitializer.PopulateIdentityServer(app, context);
             context.Database.Migrate();
 
             if (env.IsDevelopment())
