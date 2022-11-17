@@ -38,8 +38,10 @@ namespace CatalogService.Auth
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+                
 
             services.AddIdentityServer()
+                .AddProfileService<Services.ProfileService>()
                 .AddDeveloperSigningCredential()
                 .AddConfigurationStore(options =>
 

@@ -21,6 +21,7 @@ using IdentityServer4.Models;
 using NSwag;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authentication;
 
 namespace CatalogService.API
 {
@@ -55,7 +56,9 @@ namespace CatalogService.API
                 options.ResponseType = "code";
                 options.SaveTokens = true;
                 options.UsePkce = true;
-               
+                options.ClaimActions.MapJsonKey("role", "role", "role");
+                options.TokenValidationParameters.RoleClaimType = "role";
+
                 options.GetClaimsFromUserInfoEndpoint = true;
             });
             
