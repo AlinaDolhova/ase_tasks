@@ -1,4 +1,5 @@
-﻿using IdentityServer4.EntityFramework.DbContexts;
+﻿using CatalogService.Auth.Models;
+using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -53,8 +54,15 @@ namespace CatalogService.Auth.Data
 
 
                 var roleStore = new RoleStore<IdentityRole>(dbContext);
-                await roleStore.CreateAsync(new IdentityRole("manager"));
-                await roleStore.CreateAsync(new IdentityRole("buyer"));
+                if (!roleStore.Roles.Any(x => x.Name == "MANAGER"))
+                {
+                    var managerRole = await roleStore.CreateAsync(new IdentityRole("MANAGER"));
+                }
+
+                if (!roleStore.Roles.Any(x => x.Name == Role.Buyer.ToString()))
+                {
+                    var buyerRole = await roleStore.CreateAsync(new IdentityRole(Role.Buyer.ToString()));
+                }
             }
         }
     }

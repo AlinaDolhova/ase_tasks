@@ -13,14 +13,14 @@ namespace CatalogService.Auth.Services
 {
     public class ProfileService : IProfileService
     {
-        private readonly IUserClaimsPrincipalFactory<IdentityRole> _userClaimsPrincipalFactory;
-        private readonly UserManager<IdentityRole> _userMgr;
+        private readonly IUserClaimsPrincipalFactory<IdentityUser> _userClaimsPrincipalFactory;
+        private readonly UserManager<IdentityUser> _userMgr;
         private readonly RoleManager<IdentityRole> _roleMgr;
 
         public ProfileService(
-            UserManager<IdentityRole> userMgr,
+            UserManager<IdentityUser> userMgr,
             RoleManager<IdentityRole> roleMgr,
-            IUserClaimsPrincipalFactory<IdentityRole> userClaimsPrincipalFactory)
+            IUserClaimsPrincipalFactory<IdentityUser> userClaimsPrincipalFactory)
         {
             _userMgr = userMgr;
             _roleMgr = roleMgr;
@@ -60,5 +60,7 @@ namespace CatalogService.Auth.Services
         {
             return Task.CompletedTask;
         }
+
+       
     }
 }

@@ -1,4 +1,5 @@
 using CatalogService.Auth.Data;
+using IdentityServer4.AspNetIdentity;
 using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -35,12 +37,19 @@ namespace CatalogService.Auth
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+            services.Configure<SecurityStampValidatorOptions>(opts =>
+            {
+                opts.OnRefreshingPrincipal = SecurityStampValidatorCallback.UpdatePrincipal;
+            });
+
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
                 
 
             services.AddIdentityServer()
+                .AddAspNetIdentity<IdentityUser>()
                 .AddProfileService<Services.ProfileService>()
                 .AddDeveloperSigningCredential()
                 .AddConfigurationStore(options =>

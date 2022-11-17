@@ -1,5 +1,7 @@
 ﻿
 using CatalogService.Auth.Models;
+using IdentityModel;
+using IdentityServer4;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CatalogService.Auth.Controllers
@@ -17,13 +20,16 @@ namespace CatalogService.Auth.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
         [HttpPost("login")]
@@ -32,6 +38,25 @@ namespace CatalogService.Auth.Controllers
             var result = await _signInManager.PasswordSignInAsync(email, password, true, lockoutOnFailure: false);
             if (result.Succeeded)
             {
+                var user = await _userManager.FindByNameAsync(email);
+                var userRole = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+              
+                var claims = new List<Claim>
+                {
+                    new Claim(JwtClaimTypes.Subject, user.Id),
+                    new Claim(JwtClaimTypes.Name, user.UserName),
+                    new Claim(JwtClaimTypes.Role, userRole)
+           
+                };
+
+                // issue authentication cookie with subject ID and username
+                var isuser = new IdentityServerUser(user.Id)
+                {
+                    DisplayName = user.UserName,
+                    AdditionalClaims = claims
+                };
+
+                await HttpContext.SignInAsync(isuser);
                 return LocalRedirect(returnUrl);
             }
 
@@ -52,20 +77,36 @@ namespace CatalogService.Auth.Controllers
             if (result.Succeeded)
             {
                 var currentUser = await _userManager.FindByNameAsync(name);
+               
+                var roleExist = await _roleManager.RoleExistsAsync(role.ToString());
+                if (!roleExist)
+                {
+                    var roleInDb = await _roleManager.CreateAsync(new IdentityRole(role.ToString()));
+                }
+
                 var _ = await _userManager.AddToRoleAsync(currentUser, role.ToString());
 
                 _ = await _userManager.AddClaimsAsync(user, new Claim[]{
-                            new Claim("email", name),
-                            new Claim("role", role.ToString())
+                            new Claim(JwtClaimTypes.Name, name),
+                            new Claim(JwtClaimTypes.Role, role.ToString()),
+                            new Claim(JwtClaimTypes.Subject, user.Id),
                         });
 
 
                 await _signInManager.SignInAsync(currentUser, isPersistent: false);
-                return LocalRedirect(returnUrl);
+                if (!string.IsNullOrWhiteSpace(returnUrl))
+                {
+                    return LocalRedirect(returnUrl);
+                }
+
+                return Ok(JsonSerializer.Serialize(currentUser));
+                
             }
 
             throw new Exception("Can't register new user");
         }
+
+        
 
 
     }
