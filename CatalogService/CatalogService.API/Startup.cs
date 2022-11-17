@@ -17,6 +17,10 @@ using CatalogService.DAL.Interfaces;
 using RiskFirst.Hateoas;
 using CatalogService.Model;
 using Azure.Messaging.ServiceBus;
+using IdentityServer4.Models;
+using NSwag;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace CatalogService.API
 {
@@ -32,7 +36,31 @@ namespace CatalogService.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter());
+            });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddCookie("Cookies")             
+            .AddOpenIdConnect("oidc", options =>
+            {
+                options.Authority = "https://localhost:44325";
+                options.ClientId = "catalog";
+                options.ClientSecret = "secret".Sha256();
+                options.ResponseType = "code";
+                options.SaveTokens = true;
+                options.UsePkce = true;
+               
+                options.GetClaimsFromUserInfoEndpoint = true;
+            });
+            
+
+            services.AddAuthorization();
 
             var connectionString = Configuration.GetConnectionString("CatalogDbContext");
             services.AddDbContext<CatalogDbContext>(options => options.UseSqlServer(connectionString));
@@ -51,7 +79,18 @@ namespace CatalogService.API
             services.AddSingleton(typeof(ServiceBusClient), new ServiceBusClient(messageBusConnectionString, clientOptions));
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddSwaggerDocument();
+            services.AddSwaggerDocument(x=> 
+            {
+                x.AddSecurity("Bearer", new NSwag.OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme."
+                });                
+            });
 
             services.AddLinks(config =>
             {
@@ -84,6 +123,8 @@ namespace CatalogService.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

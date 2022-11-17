@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogService.Model", "Cat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogService.Tests", "CatalogService.Tests\CatalogService.Tests.csproj", "{C7144192-D576-49B4-A365-1CA598B83094}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.API", "CatalogService.API\CatalogService.API.csproj", "{EB91EFA2-1420-443A-AA6B-14E89D64123D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogService.API", "CatalogService.API\CatalogService.API.csproj", "{EB91EFA2-1420-443A-AA6B-14E89D64123D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.Auth", "CatalogService.Auth\CatalogService.Auth.csproj", "{E34A794E-86F6-40F0-BD24-92905FEDF9E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{EB91EFA2-1420-443A-AA6B-14E89D64123D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB91EFA2-1420-443A-AA6B-14E89D64123D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB91EFA2-1420-443A-AA6B-14E89D64123D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E34A794E-86F6-40F0-BD24-92905FEDF9E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E34A794E-86F6-40F0-BD24-92905FEDF9E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E34A794E-86F6-40F0-BD24-92905FEDF9E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E34A794E-86F6-40F0-BD24-92905FEDF9E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

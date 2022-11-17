@@ -1,5 +1,6 @@
 ﻿using CatalogService.BLL.Interfaces;
 using CatalogService.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,6 +29,7 @@ namespace CatalogService.API.Controllers
             return Ok(await itemService.GetAsync(categoryId, page, perPage));
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost(Name = "AddItem")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -49,6 +51,7 @@ namespace CatalogService.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPatch("{id}", Name = "UpdateItem")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -69,6 +72,7 @@ namespace CatalogService.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpDelete("{id}", Name = "DeleteItem")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
