@@ -13,17 +13,34 @@ namespace CatalogService.Auth.Data
             new Client
             {
                 ClientId = "catalog",
-                AllowedGrantTypes = new List<string> { GrantType.ClientCredentials, GrantType.AuthorizationCode },
-                RedirectUris = { "https://localhost:5002/home" },
+                AllowedGrantTypes = new List<string> { GrantType.ResourceOwnerPassword, GrantType.AuthorizationCode  },
+                RedirectUris = {"https://oauth.pstmn.io/v1/callback", "https://localhost:5003/swagger/oauth2-redirect.html", "https://localhost:5003/signin-oidc" },
                 ClientSecrets = { new Secret("secret".Sha256()) },
                 AllowedScopes = { "catalog",  StandardScopes.OpenId, "role", StandardScopes.Profile },
-                
+                AllowAccessTokensViaBrowser = true,
+                AllowPlainTextPkce = true,
+                RequireConsent = false,                
                 AllowedCorsOrigins = new List<string>
                 {
-                    "https://localhost:5001",
+                    "http://localhost:6405","http://localhost:17614", "https://localhost:5003"
                 },
-                AccessTokenLifetime = 86400
+                AccessTokenLifetime = 86400,               
             }
+        };
+
+        public static List<ApiScope> ApiScopes = new List<ApiScope>()
+        {
+            new ApiScope {Name = "catalog", Enabled = true, UserClaims =
+            {   JwtClaimTypes.Name,
+                JwtClaimTypes.Email,
+                JwtClaimTypes.Subject,
+                JwtClaimTypes.Role,
+                JwtClaimTypes.Address,
+                JwtClaimTypes.Confirmation,
+                JwtClaimTypes.EmailVerified,
+                JwtClaimTypes.Id,
+                JwtClaimTypes.Profile
+            } }
         };
 
         public static List<ApiResource> ApiResources = new List<ApiResource>
@@ -35,7 +52,8 @@ namespace CatalogService.Auth.Data
                 Scopes = new List<string>
                 {
                     StandardScopes.OpenId,
-                    "role"
+                    "role", 
+                    "catalog"
                 },
                 UserClaims = { JwtClaimTypes.Role }
             }

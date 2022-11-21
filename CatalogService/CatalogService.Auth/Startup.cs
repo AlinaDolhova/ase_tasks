@@ -60,8 +60,15 @@ namespace CatalogService.Auth
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = b => b.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationAssembly));
-                });         
+                });
 
+            services.AddCors(x =>
+            {
+                x.AddPolicy("default", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                });
+            });
             services.AddControllers();
         }
 
@@ -78,11 +85,14 @@ namespace CatalogService.Auth
 
             app.UseRouting();
 
+            app.UseCors("default");
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
+            app.UseCors();
             app.UseIdentityServer();
         }
     }

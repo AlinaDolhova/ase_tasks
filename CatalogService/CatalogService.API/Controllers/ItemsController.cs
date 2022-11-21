@@ -22,6 +22,7 @@ namespace CatalogService.API.Controllers
             this.itemService = itemService;
         }
 
+        [AllowAnonymous]
         [HttpGet(Name = "GetAllItemsByCategoryId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Item>>> GetAsync(Guid categoryId, int page = 0, int perPage = 10)

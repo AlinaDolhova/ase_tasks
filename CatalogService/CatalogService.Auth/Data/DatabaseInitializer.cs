@@ -22,35 +22,74 @@ namespace CatalogService.Auth.Data
 
                 context.Database.Migrate();
 
-                if (!context.Clients.Any())
+
+                foreach (var scope in Config.ApiScopes)
                 {
-                    foreach (var client in Config.Clients)
+                    var existingScope = context.ApiScopes.FirstOrDefault(x => x.Name == scope.Name);
+                    if (existingScope == null)
+                    {
+                        context.ApiScopes.Add(scope.ToEntity());
+                    }
+                    else
+                    {                        
+                        context.ApiScopes.Remove(existingScope);
+                        context.ApiScopes.Add(scope.ToEntity());
+                    }
+                }
+
+                context.SaveChanges();
+
+
+                foreach (var client in Config.Clients)
+                {
+                    var existingClient = context.Clients.FirstOrDefault(x => x.ClientId == client.ClientId);
+                    if (existingClient == null)
                     {
                         context.Clients.Add(client.ToEntity());
                     }
-
-                    context.SaveChanges();
+                    else
+                    {
+                        context.Clients.Remove(existingClient);
+                        context.Clients.Add(client.ToEntity());
+                    }
                 }
+                context.SaveChanges();
 
-                if (!context.IdentityResources.Any())
+
+
+                foreach (var resource in Config.IdentityResources)
                 {
-                    foreach (var resource in Config.IdentityResources)
+                    var existingResource = context.IdentityResources.FirstOrDefault(x => x.Name == resource.Name);
+                    if (existingResource == null)
                     {
                         context.IdentityResources.Add(resource.ToEntity());
                     }
-
-                    context.SaveChanges();
+                    else
+                    {
+                        context.IdentityResources.Remove(existingResource);
+                        context.IdentityResources.Add(resource.ToEntity());
+                    }
                 }
+                context.SaveChanges();
 
-                if (!context.ApiResources.Any())
+
+                foreach (var resource in Config.ApiResources)
                 {
-                    foreach (var resource in Config.ApiResources)
+                    var existingResource = context.ApiResources.FirstOrDefault(x => x.Name == resource.Name);
+
+                    if (existingResource == null)
                     {
                         context.ApiResources.Add(resource.ToEntity());
                     }
-
-                    context.SaveChanges();
+                    else
+                    {
+                        context.ApiResources.Remove(existingResource);
+                        context.ApiResources.Add(resource.ToEntity());
+                    }
                 }
+
+                context.SaveChanges();
+
 
 
                 var roleStore = new RoleStore<IdentityRole>(dbContext);
@@ -63,6 +102,8 @@ namespace CatalogService.Auth.Data
                 {
                     var buyerRole = await roleStore.CreateAsync(new IdentityRole(Role.Buyer.ToString()));
                 }
+
+                dbContext.SaveChanges();
             }
         }
     }

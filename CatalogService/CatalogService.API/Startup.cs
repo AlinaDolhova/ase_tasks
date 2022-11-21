@@ -22,6 +22,13 @@ using NSwag;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using OpenApiOAuthFlows = NSwag.OpenApiOAuthFlows;
+using NSwag.Generation.Processors.Security;
+using NSwag.AspNetCore;
+using Microsoft.IdentityModel.Tokens;
+using IdentityServer4.AccessTokenValidation;
+using Microsoft.IdentityModel.Logging;
+using System.Net;
 
 namespace CatalogService.API
 {
@@ -37,32 +44,30 @@ namespace CatalogService.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityModelEventSource.ShowPII = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            var apiName = Configuration.GetValue<string>("ApiName");
+            var apiSecret = Configuration.GetValue<string>("ApiSecret");
+            var identityAuthority = Configuration.GetValue<string>("IdentityAuthority");
+
             services.AddControllers(options =>
             {
                 options.Filters.Add(new AuthorizeFilter());
             });
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "oidc";
-            })
-            .AddCookie("Cookies")             
-            .AddOpenIdConnect("oidc", options =>
-            {
-                options.Authority = "https://localhost:44325";
-                options.ClientId = "catalog";
-                options.ClientSecret = "secret".Sha256();
-                options.ResponseType = "code";
-                options.SaveTokens = true;
-                options.UsePkce = true;
-                options.ClaimActions.MapJsonKey("role", "role", "role");
-                options.TokenValidationParameters.RoleClaimType = "role";
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+           .AddIdentityServerAuthentication(options =>
+           {
+               options.Authority = identityAuthority;
+               options.RequireHttpsMetadata = false;
+               options.ApiName = apiName;
+               options.ApiSecret = apiSecret;
+               options.SaveToken = true;
+               options.EnableCaching = true;
+           });
 
-                options.GetClaimsFromUserInfoEndpoint = true;
-            });
-            
 
+            services.AddHttpClient();
             services.AddAuthorization();
 
             var connectionString = Configuration.GetConnectionString("CatalogDbContext");
@@ -82,17 +87,34 @@ namespace CatalogService.API
             services.AddSingleton(typeof(ServiceBusClient), new ServiceBusClient(messageBusConnectionString, clientOptions));
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddSwaggerDocument(x=> 
+            services.AddCors(x =>
             {
-                x.AddSecurity("Bearer", new NSwag.OpenApiSecurityScheme
+                x.AddPolicy("default", policy =>
                 {
-                    Name = "Authorization",
-                    Type = OpenApiSecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = OpenApiSecurityApiKeyLocation.Header,
-                    Description = "JWT Authorization header using the Bearer scheme."
-                });                
+                    policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                });
+            });
+            services.AddSwaggerDocument(x =>
+            {
+                x.AddSecurity("oauth2", new NSwag.OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.OAuth2,
+                    Flow = OpenApiOAuth2Flow.Password,
+                    TokenUrl = @$"{identityAuthority}/connect/token",
+                    AuthorizationUrl = @$"{identityAuthority}/connect/authorize",
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Password = new NSwag.OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = @$"{identityAuthority}/connect/authorize",
+                            TokenUrl = @$"{identityAuthority}/connect/token",
+                            Scopes = new Dictionary<string, string> { { "catalog", "catalog" }, { "role", "role" }, { "openid", "openid" } }
+                        }
+                    }
+
+                });
+                x.OperationProcessors.Add(new OperationSecurityScopeProcessor("oauth2"));
+
             });
 
             services.AddLinks(config =>
@@ -112,6 +134,10 @@ namespace CatalogService.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var apiName = Configuration.GetValue<string>("ApiName");
+            var apiSecret = Configuration.GetValue<string>("ApiSecret");
+            var identityAuthority = Configuration.GetValue<string>("IdentityAuthority");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -127,6 +153,8 @@ namespace CatalogService.API
 
             app.UseRouting();
 
+            app.UseCors("default");
+
             app.UseAuthentication();
 
             app.UseAuthorization();
@@ -137,7 +165,18 @@ namespace CatalogService.API
             });
 
             app.UseOpenApi();
-            app.UseSwaggerUi3();
+
+            app.UseSwaggerUi3(options =>
+            {
+                options.OAuth2Client = new OAuth2ClientSettings
+                {
+                    ClientId = apiName,
+                    ClientSecret = apiSecret,
+                    AppName = apiName,
+                    UsePkceWithAuthorizationCodeGrant = false,
+                    Scopes = { "catalog", "profile", "role" }
+                };
+            });
         }
     }
 }

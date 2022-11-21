@@ -2,6 +2,9 @@
 using CatalogService.Auth.Models;
 using IdentityModel;
 using IdentityServer4;
+using IdentityServer4.Events;
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,18 +24,21 @@ namespace CatalogService.Auth.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEventService _events;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IEventService events)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _events = events;
         }
 
-        [HttpPost("login")]
+        [HttpGet("login")]
         public async Task<IActionResult> LoginAsync(string email, string password, string returnUrl)
         {
             var result = await _signInManager.PasswordSignInAsync(email, password, true, lockoutOnFailure: false);
@@ -40,13 +46,13 @@ namespace CatalogService.Auth.Controllers
             {
                 var user = await _userManager.FindByNameAsync(email);
                 var userRole = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-              
+
                 var claims = new List<Claim>
                 {
                     new Claim(JwtClaimTypes.Subject, user.Id),
                     new Claim(JwtClaimTypes.Name, user.UserName),
                     new Claim(JwtClaimTypes.Role, userRole)
-           
+
                 };
 
                 // issue authentication cookie with subject ID and username
@@ -57,7 +63,10 @@ namespace CatalogService.Auth.Controllers
                 };
 
                 await HttpContext.SignInAsync(isuser);
-                return LocalRedirect(returnUrl);
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
+
+                var token = await HttpContext.GetTokenAsync("access_token");
+                return Ok(token);
             }
 
             return Unauthorized();
@@ -77,7 +86,7 @@ namespace CatalogService.Auth.Controllers
             if (result.Succeeded)
             {
                 var currentUser = await _userManager.FindByNameAsync(name);
-               
+
                 var roleExist = await _roleManager.RoleExistsAsync(role.ToString());
                 if (!roleExist)
                 {
@@ -94,19 +103,20 @@ namespace CatalogService.Auth.Controllers
 
 
                 await _signInManager.SignInAsync(currentUser, isPersistent: false);
+                
                 if (!string.IsNullOrWhiteSpace(returnUrl))
                 {
                     return LocalRedirect(returnUrl);
                 }
 
                 return Ok(JsonSerializer.Serialize(currentUser));
-                
+
             }
 
             throw new Exception("Can't register new user");
         }
 
-        
+
 
 
     }

@@ -1,11 +1,15 @@
 ﻿using CatalogService.BLL.Interfaces;
 using CatalogService.Model;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -15,13 +19,16 @@ namespace CatalogService.API.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService categoryService;
+        private readonly ICategoryService categoryService;       
+    
 
         public CategoryController(ICategoryService categoryService)
         {
             this.categoryService = categoryService;
+           
         }
 
+        [AllowAnonymous]
         [HttpGet(Name = "GetAllCategories")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Category>>> GetAsync()
@@ -29,6 +36,7 @@ namespace CatalogService.API.Controllers
             return Ok(await categoryService.GetAsync());
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}", Name = "GetCategoryById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -55,7 +63,7 @@ namespace CatalogService.API.Controllers
                 category.Id = Guid.NewGuid();
                 await categoryService.AddAsync(category);
 
-                return CreatedAtAction(nameof(GetAsync), new { id = category.Id }, category);
+                return CreatedAtAction(nameof(GetAsync), new { id = category.Id });
             }
             catch (Exception ex) when (ex is ArgumentException ||
                                ex is ArgumentNullException)
