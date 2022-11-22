@@ -103,6 +103,15 @@ namespace CatalogService.Auth.Data
                     var buyerRole = await roleStore.CreateAsync(new IdentityRole(Role.Buyer.ToString()));
                 }
 
+                if (!roleStore.Roles.Any(x => x.Name == Role.Admin.ToString()))
+                {
+                    var res = await roleStore.CreateAsync(new IdentityRole(Role.Admin.ToString()));
+                    var adminRole = roleStore.Roles.FirstOrDefault(x => x.Name == Role.Admin.ToString());
+
+                    await roleStore.AddClaimAsync(adminRole, new System.Security.Claims.Claim("scope", "admin"));
+                }
+
+
                 dbContext.SaveChanges();
             }
         }

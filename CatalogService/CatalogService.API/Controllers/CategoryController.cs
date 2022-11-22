@@ -51,7 +51,7 @@ namespace CatalogService.API.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Admin")]
         [HttpPost(Name = "AddCategory")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -73,7 +73,7 @@ namespace CatalogService.API.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Admin")]
         [HttpPatch("{id}", Name = "UpdateCategory")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -94,7 +94,7 @@ namespace CatalogService.API.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Admin")]
         [HttpDelete("{id}", Name = "DeleteCategory")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]

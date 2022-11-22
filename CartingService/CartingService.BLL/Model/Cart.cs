@@ -6,7 +6,7 @@ namespace CartingService.Models
 {
     public class Cart
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public IList<CartItem> CartItems { get; set; }
     }

@@ -53,7 +53,7 @@ namespace CatalogService.BLL.Services
             return null;
         }
 
-        public async Task<IEnumerable<Category>> GetAsync() => (await categoryRepository.GetAllAsync()).Select(x => mapper.Map<Category>(x));
+        public async Task<IEnumerable<Category>> GetAsync() => (await categoryRepository.GetAllAsync(include: x => x.Include(t => t.Items))).Select(x => mapper.Map<Category>(x));
 
         public async Task UpdateAsync(Guid id, Category item)
         {

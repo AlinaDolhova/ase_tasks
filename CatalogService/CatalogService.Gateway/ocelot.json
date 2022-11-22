@@ -1,0 +1,126 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/items/{itemId}",
+      "DownstreamScheme": "https",
+      "RouteIsCaseSensitive": false,
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/items/{itemId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "GetCatalogItem",
+      "FileCacheOptions": { "TtlSeconds": 60 }
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/items/{itemId}",
+      "DownstreamScheme": "https",
+      "RouteIsCaseSensitive": false,
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/items/{itemId}",
+      "UpstreamHttpMethod": [ "Patch", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ManagerOnly"
+      },
+      "RouteClaimsRequirement": {
+        "role": "Admin"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/items",
+      "DownstreamScheme": "https",
+      "RouteIsCaseSensitive": false,
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/items",
+      "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ManagerOnly"
+      },
+      "RouteClaimsRequirement": {
+        "role": "Admin"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/items/{itemId}/properties",
+      "DownstreamScheme": "https",
+      "RouteIsCaseSensitive": false,
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/items/{itemId}/properties",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "GetCatalogItemProperties",
+      "FileCacheOptions": { "TtlSeconds": 60 }
+    },
+    {
+      "DownstreamPathTemplate": "/api/category/{everything}",
+      "DownstreamScheme": "https",
+      "RouteIsCaseSensitive": false,
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/category/{everything}"
+    },
+    {
+      "DownstreamPathTemplate": "/api/category",
+      "DownstreamScheme": "https",
+      "RouteIsCaseSensitive": false,
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/category"
+    },
+    {
+      "DownstreamPathTemplate": "/api/cart/{everything}",
+      "DownstreamScheme": "https",
+      "RouteIsCaseSensitive": false,
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5005
+        }
+      ],
+      "UpstreamPathTemplate": "/cart/{everything}"
+
+    }
+  ], 
+  "Aggregates": [
+    {
+      "RouteKeys": [
+        "GetCatalogItem",
+        "GetCatalogItemProperties"
+      ],
+      "RouteIsCaseSensitive": false,
+      "UpstreamPathTemplate": "/combineditems/{itemId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Priority": 1,
+      "Aggregator": "CatalogItemsAggregator"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5004"
+  }
+}

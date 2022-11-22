@@ -6,11 +6,11 @@ namespace CartingService.BLL
 {
     public interface ICartService
     {
-        IEnumerable<CartItem> GetCartItems(int cartId);
+        IEnumerable<CartItem> GetCartItems(Guid cartId);
 
-        void AddItemToCart(int cartId, CartItem item);
+        void AddItemToCart(Guid cartId, CartItem item);
 
-        void RemoveItemFromCart(int cartId, Guid itemId);
+        void RemoveItemFromCart(Guid cartId, Guid itemId);
 
         void UpdateItemInCarts(Guid itemId, string name, decimal price);
     }

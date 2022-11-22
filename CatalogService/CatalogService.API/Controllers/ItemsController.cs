@@ -23,14 +23,38 @@ namespace CatalogService.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet(Name = "GetAllItemsByCategoryId")]
+        [HttpGet("category/{categoryId}", Name = "GetAllItemsByCategoryId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Item>>> GetAsync(Guid categoryId, int page = 0, int perPage = 10)
         {
             return Ok(await itemService.GetAsync(categoryId, page, perPage));
         }
 
-        [Authorize(Roles = "Manager")]
+        /// <summary>
+        /// Extend catalog service with new endpoint which returns a list of CatalogItem 
+        /// properties for the specific CatalogItem. Dictionary of key/value pairs 
+        /// (for example: brand = Samsung, model = s10). Note! You can hardcode return data to save time.
+        /// </summary>
+        /// <param name="itemId"> The id of the item</param>
+        /// <returns></returns>
+        [HttpGet("{id}/properties")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<Dictionary<string, string>>> GetPropertiesOfItemAsync(Guid id)
+        {
+            return Ok(new Dictionary<string, string>() { { "brand", "Samsung" }, { "model", "s10" } });
+        }
+
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<Item>> GetItemByIdAsync(Guid id)
+        {
+            return Ok(await itemService.GetAsync(id));
+        }
+
+
+        [Authorize(Roles = "Manager,Admin")]
         [HttpPost(Name = "AddItem")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -52,7 +76,7 @@ namespace CatalogService.API.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Admin")]
         [HttpPatch("{id}", Name = "UpdateItem")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -73,7 +97,7 @@ namespace CatalogService.API.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Admin")]
         [HttpDelete("{id}", Name = "DeleteItem")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]

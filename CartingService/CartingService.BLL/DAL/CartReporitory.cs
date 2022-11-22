@@ -18,7 +18,7 @@ namespace CartingService.DAL
             this.liteDatabase = db;
         }
 
-        public Cart GetCartById(int cartId)
+        public Cart GetCartById(Guid cartId)
         {
             return cartCollection.Find(x => x.Id == cartId).FirstOrDefault();
         }
@@ -33,14 +33,18 @@ namespace CartingService.DAL
             cartCollection.Insert(cart);
         }
 
-        public void Delete(int cartId)
+        public void Delete(Guid cartId)
         {
             cartCollection.DeleteMany(x => x.Id == cartId);
         }
 
-        public IEnumerable<Cart> GetCartsByItemId(Guid itemId)
+        public IEnumerable<Cart> GetCartsByItemId(params Guid[] itemsId)
         {
-            return cartCollection.Find(x => x.CartItems.Any(y => y.Id == itemId));
+            var results = liteDatabase.Execute
+                ("select $ from Cart include CartItems where $.CartItems[*].Value any in @0",
+                BsonMapper.Global.Serialize(itemsId)).ToList();
+
+            return results.Select(x => BsonMapper.Global.Deserialize<Cart>(x));
         }
 
         public void UpsertAll(IEnumerable<Cart> carts)

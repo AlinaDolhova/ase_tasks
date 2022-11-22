@@ -6,13 +6,13 @@ namespace CartingService.DAL.Interfaces
 {
     public interface ICartRepository
     {
-        Cart GetCartById(int cartId);
+        Cart GetCartById(Guid cartId);
         void Upsert(Cart cart);
         void Insert(Cart cart);
 
-        void Delete(int cartId);
+        void Delete(Guid cartId);
 
-        IEnumerable<Cart> GetCartsByItemId(Guid itemId);
+        IEnumerable<Cart> GetCartsByItemId(params Guid[] itemsId);
 
         void UpsertAll(IEnumerable<Cart> carts);
     }

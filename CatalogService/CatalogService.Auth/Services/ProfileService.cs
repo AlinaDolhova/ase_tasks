@@ -50,7 +50,7 @@ namespace CatalogService.Auth.Services
                             claims.AddRange(await _roleMgr.GetClaimsAsync(role));
                         }
                     }
-                }
+                }               
             }
 
             context.IssuedClaims = claims;

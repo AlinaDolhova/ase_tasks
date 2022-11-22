@@ -15,7 +15,7 @@ namespace CartingService.BLL
             this.cartRepository = cartRepository;
         }
 
-        public void AddItemToCart(int cartId, CartItem item)
+        public void AddItemToCart(Guid cartId, CartItem item)
         {
             if (item.Quantity == 0)
             {
@@ -44,12 +44,12 @@ namespace CartingService.BLL
             }
         }
 
-        public IEnumerable<CartItem> GetCartItems(int cartId)
+        public IEnumerable<CartItem> GetCartItems(Guid cartId)
         {
             return cartRepository.GetCartById(cartId)?.CartItems;
         }
 
-        public void RemoveItemFromCart(int cartId, Guid itemId)
+        public void RemoveItemFromCart(Guid cartId, Guid itemId)
         {
             var cart = cartRepository.GetCartById(cartId);
             if (cart != null)

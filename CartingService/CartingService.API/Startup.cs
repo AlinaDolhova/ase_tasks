@@ -56,8 +56,9 @@ namespace CartingService.API
 
             services.AddApiVersioning(options =>
             {
+                options.UseApiBehavior = true;
                 options.AssumeDefaultVersionWhenUnspecified = true;
-                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.DefaultApiVersion = new ApiVersion(2, 0);
                 options.ReportApiVersions = true;
                 options.ApiVersionReader = ApiVersionReader.Combine(
                         new HeaderApiVersionReader("X-Api-Version"),
@@ -65,13 +66,10 @@ namespace CartingService.API
             });
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
-            services.AddSwaggerGen(c=> {
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);            
-            });
-
            
+            services.AddSwaggerGen();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,7 +96,11 @@ namespace CartingService.API
                 endpoints.MapControllers();
             });
 
-            app.UseSwagger();
+            app.UseSwagger(options =>
+            {
+                options.SerializeAsV2 = true;
+            });
+
             app.UseSwaggerUI();
 
 

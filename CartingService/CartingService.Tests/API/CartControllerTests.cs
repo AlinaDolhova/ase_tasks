@@ -26,29 +26,18 @@ namespace CartingService.Tests.API
         [Test]
         public void Get_ReturnsCartModel_OK_V1()
         {
-            string key = "1";
+            var key = Guid.NewGuid();
 
             cartController = new CartController(cartService.Object, mapperMock.Object);
             var result = cartController.Get(key);
 
             Assert.True(result.Result is OkObjectResult);
-        }
-
-        [Test]
-        public void Get_ReturnsItemsList_OK_V2()
-        {
-            string key = "1";
-
-            cartController = new CartController(cartService.Object, mapperMock.Object);
-            var result = cartController.GetListWithItems(key);
-
-            Assert.True(result.Result is OkObjectResult);
-        }
+        }       
 
         [Test]
         public void Add_AddsCartItem_OK()
         {
-            string key = "1";
+            var key = Guid.NewGuid();
 
             cartController = new CartController(cartService.Object, mapperMock.Object);
             var result = cartController.Add(key, new CartingService.API.Models.ItemModel());
@@ -59,7 +48,7 @@ namespace CartingService.Tests.API
         [Test]
         public void Delete_RemovesItemFromCart_OK()
         {
-            string key = "1";
+            var key = Guid.NewGuid();
             Guid itemId = Guid.NewGuid();
 
             cartController = new CartController(cartService.Object, mapperMock.Object);

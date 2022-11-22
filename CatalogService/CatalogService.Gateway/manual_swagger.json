@@ -1,0 +1,744 @@
+{
+  "x-generator": "NSwag v13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "API Gateway Swagger",
+    "version": "1.0.0"
+  },
+  "host": "localhost:5004",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "text/plain",
+    "application/json",
+    "text/json"
+  ],
+  "paths": {
+    "/Category": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "Category_Get",
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Category"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "Category_Add",
+        "consumes": [
+          "application/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "category",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Category"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "400": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "Manager",
+              "Admin"
+            ]
+          }
+        ]
+      }
+    },
+    "/Category/{id}": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "Category_Get2",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Category"
+              }
+            }
+          },
+          "404": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "Category_Update",
+        "consumes": [
+          "application/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          },
+          {
+            "name": "category",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Category"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "Manager",
+              "Admin"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "Category_Delete",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "Manager",
+              "Admin"
+            ]
+          }
+        ]
+      }
+    },
+    "/Items/category/{categoryId}": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_Get",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 0,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "perPage",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Item"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/Items/{id}/properties": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_GetPropertiesOfItem",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/Items/{id}": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_GetItemById",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Item"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_Update",
+        "consumes": [
+          "application/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          },
+          {
+            "name": "item",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Item"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "Manager"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_Delete",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "Manager"
+            ]
+          }
+        ]
+      }
+    },
+    "/combineditems/{id}": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_GetItemById1",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Item"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/Items": {
+      "post": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_Add",
+        "consumes": [
+          "application/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "item",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Item"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "400": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "Manager"
+            ]
+          }
+        ]
+      }
+    },
+    "/Cart/{key}": {
+      "get": {
+        "tags": [
+          "Cart"
+        ],
+        "operationId": "GetByCartId",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "version",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/CartModel"
+            }
+          }
+        }
+      }
+    },
+    "/Cart/{cartKey}": {
+      "post": {
+        "tags": [
+          "Cart"
+        ],
+        "operationId": "AddItem",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cartKey",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "version",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/ItemModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/Cart/{cartKey}/items/{itemId}": {
+      "delete": {
+        "tags": [
+          "Cart"
+        ],
+        "operationId": "DeleteItem",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cartKey",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "itemId",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "in": "path",
+            "name": "version",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Category": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "parentCategoryId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      }
+    },
+    "ProblemDetails": {
+      "type": "object",
+      "additionalProperties": {},
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "instance": {
+          "type": "string"
+        }
+      }
+    },
+    "Item": {
+      "type": "object",
+      "required": [
+        "id",
+        "categoryId",
+        "money",
+        "amount"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "categoryId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "money": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "ItemModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "price": {
+          "format": "double",
+          "type": "number"
+        },
+        "quantity": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "CartModel": {
+      "type": "object",
+      "properties": {
+        "cartKey": {
+          "type": "string",
+          "format": "guid"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ItemModel"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "flow": "password",
+      "authorizationUrl": "https://localhost:5001/connect/authorize",
+      "tokenUrl": "https://localhost:5001/connect/token",
+      "scopes": {
+        "catalog": "catalog",
+        "role": "role",
+        "openid": "openid"
+      }
+    }
+  }
+}
