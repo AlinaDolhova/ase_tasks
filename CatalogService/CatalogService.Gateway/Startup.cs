@@ -86,7 +86,7 @@ namespace CatalogService.Gateway
                 x.OperationProcessors.Add(new OperationSecurityScopeProcessor("oauth2"));
 
             });
-           // services.AddSwaggerForOcelot(Configuration);
+            services.AddApplicationInsightsTelemetry();
 
         }
 

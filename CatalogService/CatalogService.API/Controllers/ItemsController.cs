@@ -3,6 +3,7 @@ using CatalogService.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,12 @@ namespace CatalogService.API.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly IItemService itemService;
+        private readonly ILogger<ItemsController> logger;
 
-        public ItemsController(IItemService itemService)
+        public ItemsController(IItemService itemService, ILogger<ItemsController> logger)
         {
             this.itemService = itemService;
+            this.logger = logger;
         }
 
         [AllowAnonymous]
@@ -27,6 +30,7 @@ namespace CatalogService.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Item>>> GetAsync(Guid categoryId, int page = 0, int perPage = 10)
         {
+            logger.LogInformation("Getting all items for category {id}", categoryId);
             return Ok(await itemService.GetAsync(categoryId, page, perPage));
         }
 
@@ -42,6 +46,7 @@ namespace CatalogService.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Dictionary<string, string>>> GetPropertiesOfItemAsync(Guid id)
         {
+            logger.LogInformation("Getting item details for item {id}", id);
             return Ok(new Dictionary<string, string>() { { "brand", "Samsung" }, { "model", "s10" } });
         }
 
@@ -50,6 +55,7 @@ namespace CatalogService.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Item>> GetItemByIdAsync(Guid id)
         {
+            logger.LogInformation("Getting item {id}", id);
             return Ok(await itemService.GetAsync(id));
         }
 
@@ -60,13 +66,19 @@ namespace CatalogService.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> AddAsync(Item item)
-        {
+        {            
             try
             {
-                item.Id = Guid.NewGuid();
+                if (item.Id == Guid.Empty)
+                {
+                    item.Id = Guid.NewGuid();
+                }
+
+                logger.LogInformation("Adding new item {itemId} for category {categoryId}", item.Id, item.CategoryId);
+
                 await itemService.AddAsync(item);
 
-                return CreatedAtAction(nameof(GetAsync), new { id = item.Id }, item);
+                return CreatedAtAction(nameof(GetAsync), new { id = item.Id });
             }
             catch (Exception ex) when (ex is ArgumentException ||
                                ex is ArgumentNullException)
@@ -83,6 +95,8 @@ namespace CatalogService.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> UpdateAsync(Guid id, Item item)
         {
+            logger.LogInformation("Updating item {itemId} for category {categoryId}", item.Id, item.CategoryId);
+
             try
             {
                 await itemService.UpdateAsync(id, item);
@@ -104,6 +118,8 @@ namespace CatalogService.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteAsync(Guid id)
         {
+            logger.LogInformation("Deleting item {itemId}", id);
+
             try
             {
                 await itemService.DeleteAsync(id);

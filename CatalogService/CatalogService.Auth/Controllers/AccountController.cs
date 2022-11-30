@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,17 +26,20 @@ namespace CatalogService.Auth.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEventService _events;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             RoleManager<IdentityRole> roleManager,
-            IEventService events)
+            IEventService events,
+            ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _events = events;
+            _logger = logger;
         }
 
         [HttpGet("login")]
@@ -44,6 +48,7 @@ namespace CatalogService.Auth.Controllers
             var result = await _signInManager.PasswordSignInAsync(email, password, true, lockoutOnFailure: false);
             if (result.Succeeded)
             {
+                _logger.LogInformation("For user {user} login was succesful", email);
                 var user = await _userManager.FindByNameAsync(email);
                 var userRole = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
 
@@ -69,13 +74,18 @@ namespace CatalogService.Auth.Controllers
                 return Ok(token);
             }
 
+            _logger.LogInformation("For user {user} login was unsuccesful", email);
             return Unauthorized();
         }
 
         [HttpGet("logout")]
         public async Task LogoutAsync()
         {
-            await _signInManager.SignOutAsync();
+            if (HttpContext.User?.Identity?.Name != null)
+            {
+                _logger.LogInformation("User {user} login was logged out", HttpContext.User.Identity.Name);
+                await _signInManager.SignOutAsync();
+            }
         }
 
         [HttpGet]
@@ -83,6 +93,8 @@ namespace CatalogService.Auth.Controllers
         {
             var user = new IdentityUser { UserName = name, Email = name };
             var result = await _userManager.CreateAsync(user, password);
+            _logger.LogInformation("User {name} was registered", name);
+
             if (result.Succeeded)
             {
                 var currentUser = await _userManager.FindByNameAsync(name);
@@ -115,9 +127,5 @@ namespace CatalogService.Auth.Controllers
 
             throw new Exception("Can't register new user");
         }
-
-
-
-
     }
 }

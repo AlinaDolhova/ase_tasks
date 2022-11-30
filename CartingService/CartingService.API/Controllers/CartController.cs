@@ -4,6 +4,7 @@ using CartingService.BLL;
 using CartingService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,13 @@ namespace CartingService.API.Controllers
     {
         private readonly ICartService cartService;
         private readonly IMapper mapper;
+        private readonly ILogger<CartController> logger;
 
-        public CartController(ICartService cartService, IMapper mapper)
+        public CartController(ICartService cartService, IMapper mapper, ILogger<CartController> logger)
         {
             this.cartService = cartService;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -35,8 +38,11 @@ namespace CartingService.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<CartModel> Get(Guid key)
         {
-            var items = cartService.GetCartItems(key);
+            logger.LogInformation("Carting service GET for cart id {key} received", key);
 
+            var items = cartService.GetCartItems(key).ToList();
+
+            logger.LogInformation("Carting service GET for cart id {key} completed: {items.Count} found", key, items.Count);
             return Ok(new CartModel { CartKey = key, Items = items.Select(x => mapper.Map<ItemModel>(x)).ToList() });
         }
 
@@ -53,15 +59,20 @@ namespace CartingService.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult Add(Guid cartKey, ItemModel itemModel)
         {
+            logger.LogInformation("Carting service POST for cart id {cartKey} received", cartKey);
+
             var modelForAdding = mapper.Map<CartItem>(itemModel);
 
             try
             {
                 this.cartService.AddItemToCart(cartKey, modelForAdding);
+                logger.LogInformation("Carting service POST for cart id {cartKey} completed", cartKey);
+
                 return new OkResult();
             }
-            catch
+            catch (Exception e)
             {
+                logger.LogError("Carting service POST for cart id {cartKey} failed", cartKey, e);
                 return new BadRequestResult();
             }
         }
@@ -79,7 +90,11 @@ namespace CartingService.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult Delete(Guid cartKey, Guid itemId)
         {
+            logger.LogInformation("Carting service DELETE for cart id {cartKey}, item id {itemId} received", cartKey, itemId);
+
             this.cartService.RemoveItemFromCart(cartKey, itemId);
+
+            logger.LogInformation("Carting service DELETE for cart id {cartKey}, item id {itemId} completed", cartKey, itemId);
             return new OkResult();
         }
     }

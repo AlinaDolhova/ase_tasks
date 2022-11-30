@@ -2,11 +2,10 @@
 using CartingService.API.Controllers;
 using CartingService.BLL;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CartingService.Tests.API
 {
@@ -15,12 +14,14 @@ namespace CartingService.Tests.API
         private Mock<ICartService> cartService;
         private Mock<IMapper> mapperMock;
         private CartController cartController;
+        private Mock<ILogger<CartController>> loggerMock;
 
         [SetUp]
         public void Setup()
         {
             cartService = new Mock<ICartService>();
             mapperMock = new Mock<IMapper>();
+            loggerMock = new Mock<ILogger<CartController>>();
         }
 
         [Test]
@@ -28,7 +29,7 @@ namespace CartingService.Tests.API
         {
             var key = Guid.NewGuid();
 
-            cartController = new CartController(cartService.Object, mapperMock.Object);
+            cartController = new CartController(cartService.Object, mapperMock.Object, loggerMock.Object);
             var result = cartController.Get(key);
 
             Assert.True(result.Result is OkObjectResult);
@@ -39,7 +40,7 @@ namespace CartingService.Tests.API
         {
             var key = Guid.NewGuid();
 
-            cartController = new CartController(cartService.Object, mapperMock.Object);
+            cartController = new CartController(cartService.Object, mapperMock.Object, loggerMock.Object);
             var result = cartController.Add(key, new CartingService.API.Models.ItemModel());
 
             Assert.True(result is OkResult);
@@ -51,7 +52,7 @@ namespace CartingService.Tests.API
             var key = Guid.NewGuid();
             Guid itemId = Guid.NewGuid();
 
-            cartController = new CartController(cartService.Object, mapperMock.Object);
+            cartController = new CartController(cartService.Object, mapperMock.Object, loggerMock.Object);
             var result = cartController.Delete(key, itemId);
 
             Assert.True(result is OkResult);

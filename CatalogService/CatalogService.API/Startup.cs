@@ -29,6 +29,8 @@ using Microsoft.IdentityModel.Tokens;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.IdentityModel.Logging;
 using System.Net;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace CatalogService.API
 {
@@ -129,25 +131,26 @@ namespace CatalogService.API
                           .RequireRoutedLink("delete", "DeleteModelRoute", x => new { id = x.Id });
                 });
             });
+
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             var apiName = Configuration.GetValue<string>("ApiName");
             var apiSecret = Configuration.GetValue<string>("ApiSecret");
-            var identityAuthority = Configuration.GetValue<string>("IdentityAuthority");
+            var identityAuthority = Configuration.GetValue<string>("IdentityAuthority");          
+            var logger = loggerFactory.CreateLogger<Startup>();           
 
-            if (env.IsDevelopment())
+            app.UseExceptionHandler(appError =>
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+                appError.Run(async context =>
+                {
+                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    logger.LogError("The error has occured. Status: {status}. Details: {ex}", context.Response.StatusCode, contextFeature.Error);
+                });
+            });
 
             app.UseHttpsRedirection();
 
@@ -164,7 +167,7 @@ namespace CatalogService.API
                 endpoints.MapControllers();
             });
 
-            app.UseOpenApi();
+            app.UseOpenApi();           
 
             app.UseSwaggerUi3(options =>
             {

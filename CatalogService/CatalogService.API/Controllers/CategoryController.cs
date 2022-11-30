@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,12 +20,13 @@ namespace CatalogService.API.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService categoryService;       
-    
+        private readonly ICategoryService categoryService;
+        private readonly ILogger<CategoryController> logger;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, ILogger<CategoryController> logger)
         {
             this.categoryService = categoryService;
+            this.logger = logger;
            
         }
 
@@ -33,6 +35,7 @@ namespace CatalogService.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Category>>> GetAsync()
         {
+            logger.LogInformation("Getting all categories");
             return Ok(await categoryService.GetAsync());
         }
 
@@ -42,9 +45,11 @@ namespace CatalogService.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Category>>> GetAsync(Guid id)
         {
+            logger.LogInformation("Getting category with id {id}", id);
             var result = await categoryService.GetAsync(id);
             if (result == null)
             {
+                logger.LogWarning("Getting category with id {id} - not found", id);
                 return NotFound();
             }
 
@@ -60,7 +65,12 @@ namespace CatalogService.API.Controllers
         {
             try
             {
-                category.Id = Guid.NewGuid();
+                if (category.Id == Guid.Empty)
+                {
+                    category.Id = Guid.NewGuid();
+                }
+                logger.LogInformation("Adding category with id {id}", category.Id);
+
                 await categoryService.AddAsync(category);
 
                 return CreatedAtAction(nameof(GetAsync), new { id = category.Id });
@@ -80,6 +90,7 @@ namespace CatalogService.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> UpdateAsync(Guid id, Category category)
         {
+            logger.LogInformation("Updating category with id {id}", id);
             try
             {
                 await categoryService.UpdateAsync(id, category);
@@ -101,6 +112,8 @@ namespace CatalogService.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
+            logger.LogInformation("Deleting category with id {id}", id);
+
             try
             {
                 await categoryService.DeleteAsync(id);

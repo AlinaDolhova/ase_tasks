@@ -2,10 +2,14 @@
 using Azure.Messaging.ServiceBus.Administration;
 using CartingService.BLL.Interfaces;
 using CartingService.Model;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration.Internal;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -21,12 +25,20 @@ namespace CartingService.BLL
         private readonly ServiceBusAdministrationClient adminClient;
         private readonly ServiceBusProcessor serviceBusProcessor;
         private readonly IConfigurationService configurationService;
+        private readonly ILogger<ServiceBusConsumerService> logger;
+        private readonly TelemetryClient telemetryClient;
 
         private readonly ICartService cartService;
 
-        public ServiceBusConsumerService(ServiceBusClient client, ServiceBusAdministrationClient serviceBusAdministrationClient,
-            ICartService cartService, IConfigurationService configurationService)
+        public ServiceBusConsumerService(
+            ServiceBusClient client, 
+            ServiceBusAdministrationClient serviceBusAdministrationClient,
+            ICartService cartService, 
+            IConfigurationService configurationService, 
+            ILogger<ServiceBusConsumerService> logger,
+            TelemetryClient telemetryClient)
         {
+            this.telemetryClient = telemetryClient;
             ServiceBusProcessorOptions _serviceBusProcessorOptions = new ServiceBusProcessorOptions
             {
                 MaxConcurrentCalls = 1,
@@ -38,6 +50,7 @@ namespace CartingService.BLL
             this.adminClient = serviceBusAdministrationClient;
             this.cartService = cartService;
             this.configurationService = configurationService;
+            this.logger = logger;
         }
         public async Task PrepareFiltersAndHandleMessages()
         {
@@ -77,16 +90,43 @@ namespace CartingService.BLL
 
         private async Task ProcessMessagesAsync(ProcessMessageEventArgs args)
         {
-            var item = JsonConvert.DeserializeObject<ItemUpdatedMessage>(args.Message.Body.ToString());
+            ServiceBusReceivedMessage message = args.Message;
+            if (message.ApplicationProperties.TryGetValue("Diagnostic-Id", out var objectId) && objectId is string diagnosticId)
+            {
+                var activity = new Activity("ServiceBusProcessor.ProcessItemUpdatedMessage");
+                activity.SetParentId(diagnosticId);
 
-            this.cartService.UpdateItemInCarts(item.Id, item.Name, item.Price);
+                using (var operation = telemetryClient.StartOperation<RequestTelemetry>("Process", activity.RootId, activity.ParentId))
+                {
+                    telemetryClient.TrackTrace("Received ItemUpdatedMessage message");
+                    try
+                    {
+                        logger.LogDebug("ProcessMessagesAsync: message received: {message}", args);
 
-            await args.CompleteMessageAsync(args.Message);
+                        var item = JsonConvert.DeserializeObject<ItemUpdatedMessage>(args.Message.Body.ToString());
+
+                        logger.LogInformation("ProcessMessagesAsync: message received for {id}:", item.Id);
+
+                        this.cartService.UpdateItemInCarts(item.Id, item.Name, item.Price);
+                        await args.CompleteMessageAsync(args.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        telemetryClient.TrackException(ex);
+                        operation.Telemetry.Success = false;
+                        throw;
+                    }
+                    finally
+                    {
+                        telemetryClient.TrackTrace("Done");
+                    }
+                }
+            }                
         }
 
         private async Task ProcessErrorAsync(ProcessErrorEventArgs args)
         {
-            Console.WriteLine(args.Exception.ToString());
+            logger.LogError("ProcessMessagesAsync: error occured. Details: {args}:", args);
         }
     }
 }
