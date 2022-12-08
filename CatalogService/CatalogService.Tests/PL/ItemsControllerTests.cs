@@ -1,6 +1,7 @@
 ﻿using CatalogService.API.Controllers;
 using CatalogService.BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -14,10 +15,12 @@ namespace CatalogService.Tests.PL
     {
         private ItemsController itemsController;
         private Mock<IItemService> itemServiceMock;
+        private Mock<ILogger<ItemsController>> loggerMock;
 
         [SetUp]
         public void Setup()
         {
+            this.loggerMock = new Mock<ILogger<ItemsController>>();
             this.itemServiceMock = new Mock<IItemService>();
         }
         
@@ -25,7 +28,7 @@ namespace CatalogService.Tests.PL
         [Test]
         public async Task ItemsController_AddItem_OK()
         {
-            itemsController = new ItemsController(itemServiceMock.Object);
+            itemsController = new ItemsController(itemServiceMock.Object, loggerMock.Object);
 
             var result = await itemsController.AddAsync(new Model.Item());
 
@@ -36,7 +39,7 @@ namespace CatalogService.Tests.PL
         public async Task ItemsController_AddItem_BadRequest()
         {
             itemServiceMock.Setup(x => x.AddAsync(It.IsAny<Model.Item>())).Throws(new ArgumentException());
-            itemsController = new ItemsController(itemServiceMock.Object);
+            itemsController = new ItemsController(itemServiceMock.Object, loggerMock.Object);
 
             var result = await itemsController.AddAsync(new Model.Item());
 
@@ -47,7 +50,7 @@ namespace CatalogService.Tests.PL
         public async Task ItemsController_UpdateItem_OK()
         {
             var id = Guid.NewGuid();
-            itemsController = new ItemsController(itemServiceMock.Object);
+            itemsController = new ItemsController(itemServiceMock.Object, loggerMock.Object);
 
             var result = await itemsController.UpdateAsync(id, new Model.Item());
 
@@ -59,7 +62,7 @@ namespace CatalogService.Tests.PL
         {
             var id = Guid.NewGuid();
             itemServiceMock.Setup(x => x.UpdateAsync(id, It.IsAny<Model.Item>())).Throws(new ArgumentException());
-            itemsController = new ItemsController(itemServiceMock.Object);
+            itemsController = new ItemsController(itemServiceMock.Object, loggerMock.Object);
 
             var result = await itemsController.UpdateAsync(id, new Model.Item());
 
@@ -71,7 +74,7 @@ namespace CatalogService.Tests.PL
         {
             var id = Guid.NewGuid();
             itemServiceMock.Setup(x => x.DeleteAsync(id)).Throws(new KeyNotFoundException());
-            itemsController = new ItemsController(itemServiceMock.Object);
+            itemsController = new ItemsController(itemServiceMock.Object, loggerMock.Object);
 
             var result = await itemsController.DeleteAsync(id);
 
@@ -82,7 +85,7 @@ namespace CatalogService.Tests.PL
         public async Task ItemsController_DeleteItem_OK()
         {
             var id = Guid.NewGuid();
-            itemsController = new ItemsController(itemServiceMock.Object);
+            itemsController = new ItemsController(itemServiceMock.Object, loggerMock.Object);
 
             var result = await itemsController.DeleteAsync(id);
 

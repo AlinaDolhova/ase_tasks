@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using CatalogService.BLL.Interfaces;
 using CatalogService.DAL.Interfaces;
+using CatalogService.DAL.Models;
 using CatalogService.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Item = CatalogService.Model.Item;
 
 namespace CatalogService.BLL.Services
 {
@@ -43,7 +46,7 @@ namespace CatalogService.BLL.Services
 
         public async Task<Item> GetAsync(Guid id)
         {
-            var itemFromDb = await itemRepository.GetByIdAsync(id);
+            var itemFromDb = (await itemRepository.GetAllAsync(x => x.Id == id, include: x => x.Include(t => t.Category))).FirstOrDefault();
 
             if (itemFromDb != null)
             {
@@ -53,7 +56,7 @@ namespace CatalogService.BLL.Services
             return null;
         }
 
-        public async Task<IEnumerable<Item>> GetAsync() => (await itemRepository.GetAllAsync()).Select(x => mapper.Map<Item>(x));
+        public async Task<IEnumerable<Item>> GetAsync() => (await itemRepository.GetAllAsync(x => !x.IsDeleted)).Select(x => mapper.Map<Item>(x));
 
         public async Task UpdateAsync(Guid id, Item item)
         {
@@ -78,7 +81,7 @@ namespace CatalogService.BLL.Services
         public async Task<IEnumerable<Item>> GetAsync(Guid categoryId, int page, int perPage)
         {
             var skipValue = page * perPage;
-            return (await itemRepository.GetAllAsync(x => x.CategoryId == categoryId, take: perPage, skip: skipValue)).Select(x => mapper.Map<Item>(x));
+            return (await itemRepository.GetAllAsync(x => x.CategoryId == categoryId, include: x => x.Include(t => t.Category), take: perPage, skip: skipValue)).Select(x => mapper.Map<Item>(x));
         }
 
         private void ValidateItem(Item item)

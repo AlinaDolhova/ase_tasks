@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CatalogService.Common\CatalogService.Common.csproj" />
     <ProjectReference Include="..\CatalogService\CatalogService.BLL.csproj" />
   </ItemGroup>
 

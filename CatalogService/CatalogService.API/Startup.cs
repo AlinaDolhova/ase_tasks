@@ -1,15 +1,10 @@
 using CatalogService.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore.SqlServer;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CatalogService.BLL.Interfaces;
 using CatalogService.BLL.Services;
@@ -17,20 +12,17 @@ using CatalogService.DAL.Interfaces;
 using RiskFirst.Hateoas;
 using CatalogService.Model;
 using Azure.Messaging.ServiceBus;
-using IdentityServer4.Models;
 using NSwag;
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Authentication;
 using OpenApiOAuthFlows = NSwag.OpenApiOAuthFlows;
 using NSwag.Generation.Processors.Security;
 using NSwag.AspNetCore;
-using Microsoft.IdentityModel.Tokens;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.IdentityModel.Logging;
 using System.Net;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Diagnostics;
+using CatalogService.Common.MapperProfiles;
 
 namespace CatalogService.API
 {
@@ -87,7 +79,7 @@ namespace CatalogService.API
             };
 
             services.AddSingleton(typeof(ServiceBusClient), new ServiceBusClient(messageBusConnectionString, clientOptions));
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(Startup), typeof(CatalogProfile));
 
             services.AddCors(x =>
             {

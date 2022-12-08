@@ -40,7 +40,7 @@ namespace CatalogService.BLL.Services
             await this.categoryRepository.DeleteAsync(id);
         }
 
-        public async Task<Category> GetAsync(Guid id)
+        public async Task<Category> GetAsync(Guid id, bool includeItems = true)
         {
             var categoriesList = await categoryRepository.GetAllAsync(x => x.Id == id, include: x => x.Include(t => t.Items));
             var category = categoriesList.FirstOrDefault();
@@ -53,7 +53,10 @@ namespace CatalogService.BLL.Services
             return null;
         }
 
-        public async Task<IEnumerable<Category>> GetAsync() => (await categoryRepository.GetAllAsync(include: x => x.Include(t => t.Items))).Select(x => mapper.Map<Category>(x));
+        public async Task<IEnumerable<Category>> GetAsync()
+        {
+            return (await categoryRepository.GetAllAsync(include: x => x.Include(t => t.Items))).Select(x => mapper.Map<Category>(x));
+        }
 
         public async Task UpdateAsync(Guid id, Category item)
         {

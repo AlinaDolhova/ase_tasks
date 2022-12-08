@@ -44,7 +44,7 @@ namespace CatalogService.API.Controllers
         [HttpGet("{id}/properties")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Dictionary<string, string>>> GetPropertiesOfItemAsync(Guid id)
+        public ActionResult<Dictionary<string, string>> GetPropertiesOfItem(Guid id)
         {
             logger.LogInformation("Getting item details for item {id}", id);
             return Ok(new Dictionary<string, string>() { { "brand", "Samsung" }, { "model", "s10" } });

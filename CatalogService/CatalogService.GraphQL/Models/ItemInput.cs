@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace CatalogService.Model
+namespace CatalogService.GraphQL.Models
 {
-    public class Item
+    public class ItemInput
     {
         public Guid Id { get; set; }
 
@@ -10,14 +10,10 @@ namespace CatalogService.Model
 
         public string Description { get; set; }
 
-        public string ImageUrl { get; set; }     
-
         public Guid CategoryId { get; set; }
 
         public decimal Money { get; set; }
 
         public int Amount { get; set; }
-
-        public Category Category { get; set; }
     }
 }

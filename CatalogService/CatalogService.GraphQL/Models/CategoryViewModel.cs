@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
-namespace CatalogService.Model
+namespace CatalogService.GraphQL.Models
 {
-    public class Category
+    public class CategoryViewModel
     {
         public Guid Id { get; set; }
 
@@ -13,6 +14,6 @@ namespace CatalogService.Model
 
         public Guid? ParentCategoryId { get; set; }
 
-        public IEnumerable<Item> Items { get; set; }
+        public IEnumerable<ItemViewModel> Items { get; set; }
     }
 }

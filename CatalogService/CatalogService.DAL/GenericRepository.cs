@@ -24,16 +24,15 @@ namespace CatalogService.DAL
 
         public async Task AddAsync(T entity)
         {
-            this.entities.Add(entity);
             try
             {
+                this.entities.Add(entity);
                 await this.dbContext.SaveChangesAsync();
             }
-            catch(Exception e)
+            catch
             {
                 throw;
             }
-
         }
 
         public async Task DeleteAsync(Guid id)

@@ -9,7 +9,7 @@ namespace CatalogService.BLL.Interfaces
     {
         //Category: get/list/add/update/delete
 
-        Task<Category> GetAsync(Guid id);
+        Task<Category> GetAsync(Guid id, bool includeItems = true);
 
         Task<IEnumerable<Category>> GetAsync();
 
