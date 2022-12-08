@@ -1,0 +1,3 @@
+﻿C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CategoryService.Model\Category.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CategoryService.Model\Item.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CategoryService.Model\ItemUpdatedMessage.cs

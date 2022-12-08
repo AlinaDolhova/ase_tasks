@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CatalogService.API\CatalogService.API.csproj" />
     <ProjectReference Include="..\CatalogService.DAL\CatalogService.DAL.csproj" />
+    <ProjectReference Include="..\CatalogService.GraphQL\CatalogService.GraphQL.csproj" />
     <ProjectReference Include="..\CatalogService\CatalogService.BLL.csproj" />
   </ItemGroup>
 

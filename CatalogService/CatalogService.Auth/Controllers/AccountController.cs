@@ -43,7 +43,7 @@ namespace CatalogService.Auth.Controllers
         }
 
         [HttpGet("login")]
-        public async Task<IActionResult> LoginAsync(string email, string password, string returnUrl)
+        public async Task<IActionResult> LoginAsync(string email, string password)
         {
             var result = await _signInManager.PasswordSignInAsync(email, password, true, lockoutOnFailure: false);
             if (result.Succeeded)
@@ -102,12 +102,12 @@ namespace CatalogService.Auth.Controllers
                 var roleExist = await _roleManager.RoleExistsAsync(role.ToString());
                 if (!roleExist)
                 {
-                    var roleInDb = await _roleManager.CreateAsync(new IdentityRole(role.ToString()));
+                    await _roleManager.CreateAsync(new IdentityRole(role.ToString()));
                 }
 
-                var _ = await _userManager.AddToRoleAsync(currentUser, role.ToString());
+                await _userManager.AddToRoleAsync(currentUser, role.ToString());
 
-                _ = await _userManager.AddClaimsAsync(user, new Claim[]{
+                 await _userManager.AddClaimsAsync(user, new Claim[]{
                             new Claim(JwtClaimTypes.Name, name),
                             new Claim(JwtClaimTypes.Role, role.ToString()),
                             new Claim(JwtClaimTypes.Subject, user.Id),
@@ -125,7 +125,7 @@ namespace CatalogService.Auth.Controllers
 
             }
 
-            throw new Exception("Can't register new user");
+            return BadRequest("Can't register new user");
         }
     }
 }

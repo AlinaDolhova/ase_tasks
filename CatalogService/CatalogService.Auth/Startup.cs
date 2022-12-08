@@ -76,18 +76,18 @@ namespace CatalogService.Auth
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ApplicationDbContext context, ILoggerFactory loggerFactory)
         {
-            DatabaseInitializer.PopulateIdentityServer(app, context);
+            _ = DatabaseInitializer.PopulateIdentityServer(app, context);
             context.Database.Migrate();
             var logger = loggerFactory.CreateLogger<Startup>();
 
             app.UseExceptionHandler(appError =>
             {
-                appError.Run(async context =>
-                {
+                appError.Run(context => {
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     logger.LogError("The error has occured. Status: {status}. Details: {ex}", context.Response.StatusCode, contextFeature.Error);
+                    return Task.CompletedTask;
                 });
             });
 

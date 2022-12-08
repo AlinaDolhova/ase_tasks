@@ -77,7 +77,7 @@ namespace CatalogService.BLL.Services
         {
             if (null == category)
             {
-                throw new ArgumentNullException("Category can't be null");
+                throw new ArgumentNullException("category", "Category can't be null");
             }
 
             if (string.IsNullOrEmpty(category.Name))

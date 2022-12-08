@@ -32,7 +32,7 @@ namespace CatalogService.Tests.PL
 
             var result = await itemsController.AddAsync(new Model.Item());
 
-            Assert.True(result is Microsoft.AspNetCore.Mvc.CreatedAtActionResult);
+            Assert.That(result is Microsoft.AspNetCore.Mvc.CreatedAtActionResult, Is.True);
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace CatalogService.Tests.PL
 
             var result = await itemsController.AddAsync(new Model.Item());
 
-            Assert.True(result is BadRequestObjectResult);
+            Assert.That(result is BadRequestObjectResult, Is.True);
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace CatalogService.Tests.PL
 
             var result = await itemsController.UpdateAsync(id, new Model.Item());
 
-            Assert.True(result is OkResult);
+            Assert.That(result is OkResult, Is.True);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace CatalogService.Tests.PL
 
             var result = await itemsController.UpdateAsync(id, new Model.Item());
 
-            Assert.True(result is BadRequestObjectResult);
+            Assert.That(result is BadRequestObjectResult, Is.True);
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace CatalogService.Tests.PL
 
             var result = await itemsController.DeleteAsync(id);
 
-            Assert.True(result is NotFoundObjectResult);
+            Assert.That(result is NotFoundObjectResult, Is.True);
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace CatalogService.Tests.PL
 
             var result = await itemsController.DeleteAsync(id);
 
-            Assert.True(result is OkResult);
+            Assert.That(result is OkResult, Is.True);
         }
     }
 }

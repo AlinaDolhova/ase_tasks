@@ -32,7 +32,7 @@ namespace CatalogService.Tests.PL
             categoryController = new CategoryController(categoryServiceMock.Object, loggerMock.Object);
             var okResult = (await categoryController.GetAsync());
 
-            Assert.True(okResult.Result is OkObjectResult);
+            Assert.That(okResult.Result is OkObjectResult, Is.True);
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace CatalogService.Tests.PL
 
             var okResult = (await categoryController.GetAsync(id));
 
-            Assert.True(okResult.Result is OkObjectResult);
+            Assert.That(okResult.Result is OkObjectResult, Is.True);
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace CatalogService.Tests.PL
 
             var result = (await categoryController.GetAsync(id));
 
-            Assert.True(result.Result is NotFoundResult);
+            Assert.That(result.Result is NotFoundResult, Is.True);
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace CatalogService.Tests.PL
 
             var result = await categoryController.AddAsync(new Model.Category());
 
-            Assert.True(result is Microsoft.AspNetCore.Mvc.CreatedAtActionResult);
+            Assert.That(result is Microsoft.AspNetCore.Mvc.CreatedAtActionResult, Is.True);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace CatalogService.Tests.PL
 
             var result = await categoryController.AddAsync(new Model.Category());
 
-            Assert.True(result is BadRequestObjectResult);
+            Assert.That(result is BadRequestObjectResult, Is.True);
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace CatalogService.Tests.PL
 
             var result = await categoryController.UpdateAsync(id, new Model.Category());
 
-            Assert.True(result is OkResult);
+            Assert.That(result is OkResult, Is.True);
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace CatalogService.Tests.PL
 
             var result = await categoryController.UpdateAsync(id, new Model.Category());
 
-            Assert.True(result is BadRequestObjectResult);
+            Assert.That(result is BadRequestObjectResult, Is.True);
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace CatalogService.Tests.PL
 
             var result = await categoryController.DeleteAsync(id);
 
-            Assert.True(result is NotFoundObjectResult);
+            Assert.That(result is NotFoundObjectResult, Is.True);
         }
 
         [Test]
@@ -122,7 +122,7 @@ namespace CatalogService.Tests.PL
 
             var result = await categoryController.DeleteAsync(id);
 
-            Assert.True(result is OkResult);
+            Assert.That(result is OkResult, Is.True);
         }
     }
 }

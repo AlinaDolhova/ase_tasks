@@ -95,14 +95,12 @@ namespace CatalogService.Gateway
         {
             var apiName = Configuration.GetValue<string>("ApiName");
             var apiSecret = Configuration.GetValue<string>("ApiSecret");
-            var identityAuthority = Configuration.GetValue<string>("IdentityAuthority");
 
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
             
             app.UseHttpsRedirection();
 

@@ -1,0 +1,15 @@
+﻿C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\Aggregators\CatalogItemsAggregator.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\Program.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\Startup.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\obj\Debug\netcoreapp3.1\.NETCoreApp,Version=v3.1.AssemblyAttributes.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\obj\Debug\netcoreapp3.1\CatalogService.Gateway.AssemblyInfo.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\obj\Debug\netcoreapp3.1\CatalogService.Gateway.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\wwwroot\dummy.txt
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\wwwroot\swagger.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\appsettings.Development.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\appsettings.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\ocelot.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\Properties\launchSettings.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\Properties\serviceDependencies.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\Properties\serviceDependencies.local.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.Gateway\manual_swagger.json

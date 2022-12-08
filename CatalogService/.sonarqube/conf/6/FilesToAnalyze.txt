@@ -1,0 +1,15 @@
+﻿C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\Controllers\CategoryController.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\Controllers\ItemsController.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\MapperProfiles\GraphQlMappingProfile.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\Models\CategoryInput.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\Models\CategoryViewModel.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\Models\IdNamePair.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\Models\ItemInput.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\Models\ItemViewModel.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\Program.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\Startup.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\obj\Debug\netcoreapp3.1\.NETCoreApp,Version=v3.1.AssemblyAttributes.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\obj\Debug\netcoreapp3.1\CatalogService.GraphQL.AssemblyInfo.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\appsettings.Development.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\appsettings.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.GraphQL\Properties\launchSettings.json

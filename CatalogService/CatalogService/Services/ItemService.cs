@@ -57,6 +57,12 @@ namespace CatalogService.BLL.Services
         }
 
         public async Task<IEnumerable<Item>> GetAsync() => (await itemRepository.GetAllAsync(x => !x.IsDeleted)).Select(x => mapper.Map<Item>(x));
+        
+        public async Task<IEnumerable<Item>> GetAsync(Guid categoryId, int page, int perPage)
+        {
+            var skipValue = page * perPage;
+            return (await itemRepository.GetAllAsync(x => x.CategoryId == categoryId, include: x => x.Include(t => t.Category), take: perPage, skip: skipValue)).Select(x => mapper.Map<Item>(x));
+        }
 
         public async Task UpdateAsync(Guid id, Item item)
         {
@@ -77,18 +83,11 @@ namespace CatalogService.BLL.Services
 
             await itemRepository.UpdateAsync(itemFromDb);
         }
-
-        public async Task<IEnumerable<Item>> GetAsync(Guid categoryId, int page, int perPage)
-        {
-            var skipValue = page * perPage;
-            return (await itemRepository.GetAllAsync(x => x.CategoryId == categoryId, include: x => x.Include(t => t.Category), take: perPage, skip: skipValue)).Select(x => mapper.Map<Item>(x));
-        }
-
         private void ValidateItem(Item item)
         {
             if (null == item)
             {
-                throw new ArgumentNullException("Item can't be null");
+                throw new ArgumentNullException("item", "Item can't be null");
             }
 
             if (string.IsNullOrEmpty(item.Name))

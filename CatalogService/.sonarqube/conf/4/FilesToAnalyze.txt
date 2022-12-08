@@ -1,0 +1,6 @@
+﻿C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService\Interfaces\ICategoryService.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService\Interfaces\IItemService.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService\Interfaces\IMessagingService.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService\Services\CategoryService.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService\Services\ItemService.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService\Services\MessagingService.cs

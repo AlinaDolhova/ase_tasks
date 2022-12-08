@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
@@ -8,7 +9,7 @@ namespace CatalogService.Auth.Data
 {
     public static class Config
     {
-        public static List<Client> Clients = new List<Client>
+        public static readonly ReadOnlyCollection<Client> Clients = new List<Client>
         {
             new Client
             {
@@ -26,9 +27,9 @@ namespace CatalogService.Auth.Data
                 },
                 AccessTokenLifetime = 86400,               
             }
-        };
+        }.AsReadOnly();
 
-        public static List<ApiScope> ApiScopes = new List<ApiScope>()
+        public static readonly ReadOnlyCollection<ApiScope> ApiScopes = new List<ApiScope>()
         {
             new ApiScope {Name = "catalog", Enabled = true, UserClaims =
             {   JwtClaimTypes.Name,
@@ -41,9 +42,9 @@ namespace CatalogService.Auth.Data
                 JwtClaimTypes.Id,
                 JwtClaimTypes.Profile
             } }
-        };
+        }.AsReadOnly();
 
-        public static List<ApiResource> ApiResources = new List<ApiResource>
+        public static readonly ReadOnlyCollection<ApiResource> ApiResources = new List<ApiResource>
         {
             new ApiResource
             {
@@ -57,14 +58,14 @@ namespace CatalogService.Auth.Data
                 },
                 UserClaims = { JwtClaimTypes.Role }
             }
-        };
+        }.AsReadOnly();
 
-        public static IEnumerable<IdentityResource> IdentityResources =>
+        public static readonly ReadOnlyCollection<IdentityResource> IdentityResources =
             new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResource("role", "User role(s)", new List<string> { "role" })
-            };
+            }.AsReadOnly();
     }
 }

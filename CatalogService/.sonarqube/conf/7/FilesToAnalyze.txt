@@ -1,0 +1,13 @@
+﻿C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Controllers\CategoryController.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Controllers\ItemsController.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Link.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Program.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Startup.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\obj\Debug\netcoreapp3.1\.NETCoreApp,Version=v3.1.AssemblyAttributes.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\obj\Debug\netcoreapp3.1\CatalogService.API.AssemblyInfo.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\obj\Debug\netcoreapp3.1\CatalogService.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\appsettings.Development.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\appsettings.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Properties\launchSettings.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Properties\serviceDependencies.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Properties\serviceDependencies.local.json

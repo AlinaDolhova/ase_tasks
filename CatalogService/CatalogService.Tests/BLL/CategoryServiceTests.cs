@@ -16,7 +16,7 @@ namespace CatalogService.Tests
     public class CategoryServiceTests
     {
         private Mock<IGenericRepository<Category>> repoMock;
-        private BLL.Services.CategoryService categoryService;
+        private CategoryService categoryService;
         private Mock<IMapper> mapperMock;
 
         [SetUp]
