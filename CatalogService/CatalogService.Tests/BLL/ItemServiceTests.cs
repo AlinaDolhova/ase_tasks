@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CatalogService.BLL.Interfaces;
+﻿using CatalogService.BLL.Interfaces;
 using CatalogService.BLL.Services;
 using CatalogService.DAL.Interfaces;
 using CatalogService.DAL.Models;
@@ -9,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace CatalogService.Tests
 {
