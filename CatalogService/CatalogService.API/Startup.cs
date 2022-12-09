@@ -47,6 +47,11 @@ namespace CatalogService.API
             services.AddControllers(options =>
             {
                 options.Filters.Add(new AuthorizeFilter());
+            })
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.MaxDepth = 3;
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
