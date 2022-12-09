@@ -124,9 +124,11 @@ namespace CartingService.BLL
             }                
         }
 
-        private async Task ProcessErrorAsync(ProcessErrorEventArgs args)
+        private Task ProcessErrorAsync(ProcessErrorEventArgs args)
         {
             logger.LogError("ProcessMessagesAsync: error occured. Details: {args}:", args);
+
+            return Task.CompletedTask;
         }
     }
 }

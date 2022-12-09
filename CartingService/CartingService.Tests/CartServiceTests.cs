@@ -1,6 +1,7 @@
 using CartingService.BLL;
 using CartingService.DAL.Interfaces;
 using CartingService.Models;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -13,12 +14,14 @@ namespace CartingService.Tests
     public class CartServiceTests
     {
         private Mock<ICartRepository> cartRepo;
+        private Mock<ILogger<CartService>> cartServiceLogger;
         private CartService cartingService;
 
         [SetUp]
         public void Setup()
         {
             cartRepo = new Mock<ICartRepository>();
+            cartServiceLogger = new Mock<ILogger<CartService>>();
 
         }
 
@@ -30,7 +33,7 @@ namespace CartingService.Tests
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
 
-            cartingService = new CartService(cartRepo.Object);
+            cartingService = new CartService(cartRepo.Object, cartServiceLogger.Object);
             var result = cartingService.GetCartItems(cartId).ToList();
 
             Assert.That(result.Count, Is.EqualTo(1));
@@ -41,7 +44,7 @@ namespace CartingService.Tests
         {
             var cartId = Guid.NewGuid();
 
-            cartingService = new CartService(cartRepo.Object);
+            cartingService = new CartService(cartRepo.Object, cartServiceLogger.Object);
             var result = cartingService.GetCartItems(cartId);
 
             Assert.That(result, Is.Null);
@@ -56,7 +59,7 @@ namespace CartingService.Tests
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
 
-            cartingService = new CartService(cartRepo.Object);
+            cartingService = new CartService(cartRepo.Object, cartServiceLogger.Object);
             cartingService.AddItemToCart(cartId, item);
 
             cartRepo.Verify(x => x.Upsert(It.Is<Cart>(cart => cart.CartItems.Count == 2 && cart.CartItems.All(cartItem => cartItem.Quantity == 1))));
@@ -71,7 +74,7 @@ namespace CartingService.Tests
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
 
-            cartingService = new CartService(cartRepo.Object);
+            cartingService = new CartService(cartRepo.Object, cartServiceLogger.Object);
             cartingService.AddItemToCart(cartId, item);
 
             cartRepo.Verify(x => x.Upsert(It.Is<Cart>(cart => cart.CartItems.Count == 1 && cart.CartItems.Single().Quantity == 2)));
@@ -83,7 +86,7 @@ namespace CartingService.Tests
             var cartId = Guid.NewGuid();
             var item = new CartItem { Id = Guid.NewGuid() };
 
-            cartingService = new CartService(cartRepo.Object);
+            cartingService = new CartService(cartRepo.Object, cartServiceLogger.Object);
             cartingService.AddItemToCart(cartId, item);
 
             cartRepo.Verify(x => x.Insert(It.Is<Cart>(cart => cart.Id == cartId && cart.CartItems.Count == 1 && cart.CartItems.Single().Quantity == 1)));
@@ -98,7 +101,7 @@ namespace CartingService.Tests
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
 
-            cartingService = new CartService(cartRepo.Object);
+            cartingService = new CartService(cartRepo.Object, cartServiceLogger.Object);
             cartingService.RemoveItemFromCart(cartId, itemId);
 
             cartRepo.Verify(x => x.Upsert(It.Is<Cart>(cart => cart.CartItems.Count == 1 && cart.CartItems.Single().Quantity == 1)));
@@ -114,7 +117,7 @@ namespace CartingService.Tests
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
 
-            cartingService = new CartService(cartRepo.Object);
+            cartingService = new CartService(cartRepo.Object, cartServiceLogger.Object);
             cartingService.RemoveItemFromCart(cartId, itemId);
 
             cartRepo.Verify(x => x.Upsert(It.Is<Cart>(cart => cart.CartItems.Count == 1 && cart.CartItems.Single().Id == remainingItemId)));
@@ -129,7 +132,7 @@ namespace CartingService.Tests
 
             cartRepo.Setup(x => x.GetCartById(cartId)).Returns(cart);
 
-            cartingService = new CartService(cartRepo.Object);
+            cartingService = new CartService(cartRepo.Object, cartServiceLogger.Object);
             cartingService.RemoveItemFromCart(cartId, itemId);
 
             cartRepo.Verify(x => x.Delete(It.Is<Guid>(id => id == cartId)));
