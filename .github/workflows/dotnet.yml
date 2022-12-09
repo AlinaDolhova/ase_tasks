@@ -1,0 +1,33 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 3.1.x
+    - name: Restore dependencies for Catalog
+      run: dotnet restore CatalogService.sln
+      working-directory: CatalogService
+    - name: Build Catalog 
+      run: dotnet build CatalogService.sln --no-restore
+      working-directory: CatalogService
+    - name: Restore dependencies for Carting
+      run: dotnet restore CartingService.sln
+      working-directory: CartingService
+    - name: Build Carting 
+      run: dotnet build CartingService.sln --no-restore
+      working-directory: CartingService
+    - name: Test Catalog
+      run: dotnet test --no-build --verbosity normal
+      working-directory: CatalogService
