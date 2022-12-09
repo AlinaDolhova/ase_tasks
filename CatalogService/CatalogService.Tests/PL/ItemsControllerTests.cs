@@ -1,13 +1,13 @@
-﻿using CatalogService.API.Controllers;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using CatalogService.API.Controllers;
 using CatalogService.BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CatalogService.Tests.PL
 {
@@ -23,7 +23,7 @@ namespace CatalogService.Tests.PL
             this.loggerMock = new Mock<ILogger<ItemsController>>();
             this.itemServiceMock = new Mock<IItemService>();
         }
-        
+
 
         [Test]
         public async Task ItemsController_AddItem_OK()

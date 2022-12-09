@@ -1,4 +1,8 @@
-﻿using CatalogService.API.Controllers;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using CatalogService.API.Controllers;
 using CatalogService.BLL.Interfaces;
 using CatalogService.BLL.Services;
 using Microsoft.AspNetCore.Http;
@@ -6,10 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CatalogService.Tests.PL
 {
@@ -117,7 +117,7 @@ namespace CatalogService.Tests.PL
         [Test]
         public async Task CategoryController_DeleteCategory_OK()
         {
-            var id = Guid.NewGuid();           
+            var id = Guid.NewGuid();
             categoryController = new CategoryController(categoryServiceMock.Object, loggerMock.Object);
 
             var result = await categoryController.DeleteAsync(id);

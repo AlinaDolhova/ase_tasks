@@ -1,15 +1,15 @@
-﻿using CatalogService.BLL.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using CatalogService.BLL.Interfaces;
+using CatalogService.GraphQL.Models;
+using CatalogService.Model;
+using GraphQL.AspNet.Attributes;
 using GraphQL.AspNet.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
-using CatalogService.Model;
-using GraphQL.AspNet.Attributes;
-using CatalogService.GraphQL.Models;
-using AutoMapper;
-using System.Linq;
 
 namespace CatalogService.GraphQL.Controllers
 {

@@ -1,12 +1,12 @@
-﻿using Azure.Messaging.ServiceBus;
+﻿using System.Threading.Tasks;
+using Azure.Messaging.ServiceBus;
 using CatalogService.BLL.Interfaces;
 using CatalogService.Model;
 using Newtonsoft.Json;
-using System.Threading.Tasks;
 
 namespace CatalogService.BLL.Services
 {
-    public class MessagingService: IMessagingService
+    public class MessagingService : IMessagingService
     {
         private readonly ServiceBusSender sender;
 
@@ -20,7 +20,7 @@ namespace CatalogService.BLL.Services
             string messageContent = JsonConvert.SerializeObject(item);
             ServiceBusMessage message = new ServiceBusMessage(messageContent);
 
-            message.ApplicationProperties.Add("type", nameof(ItemUpdatedMessage));            
+            message.ApplicationProperties.Add("type", nameof(ItemUpdatedMessage));
 
             await sender.SendMessageAsync(message).ConfigureAwait(false);
         }

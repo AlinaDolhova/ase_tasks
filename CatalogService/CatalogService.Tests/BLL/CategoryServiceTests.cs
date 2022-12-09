@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using CatalogService.BLL.Services;
 using CatalogService.DAL.Interfaces;
@@ -5,11 +10,6 @@ using CatalogService.DAL.Models;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace CatalogService.Tests
 {

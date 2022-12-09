@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using AutoMapper;
 using CatalogService.BLL.Interfaces;
+using CatalogService.GraphQL.Controllers;
+using CatalogService.GraphQL.Models;
+using CatalogService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using System.Threading.Tasks;
-using CatalogService.GraphQL.Controllers;
-using AutoMapper;
-using CatalogService.GraphQL.Models;
-using CatalogService.Model;
 
 namespace CatalogService.Tests.GraphQL
 {

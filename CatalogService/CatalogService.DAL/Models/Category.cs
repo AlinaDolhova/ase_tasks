@@ -1,12 +1,12 @@
-﻿using CatalogService.DAL.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using CatalogService.DAL.Interfaces;
 
 namespace CatalogService.DAL.Models
 {
-    public class Category: IIdentifiable, IDeletable
+    public class Category : IIdentifiable, IDeletable
     {
         [Required]
         [Key]
@@ -14,8 +14,8 @@ namespace CatalogService.DAL.Models
 
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; }        
-        
+        public string Name { get; set; }
+
         public string ImageUrl { get; set; }
 
         public Guid? ParentCategoryId { get; set; }
@@ -26,6 +26,6 @@ namespace CatalogService.DAL.Models
 
         public IEnumerable<Category> ChildCategories { get; set; }
 
-       public IEnumerable<Item> Items { get; set; }
+        public IEnumerable<Item> Items { get; set; }
     }
 }

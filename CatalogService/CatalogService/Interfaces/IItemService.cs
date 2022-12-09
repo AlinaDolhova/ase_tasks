@@ -1,7 +1,7 @@
-﻿using CatalogService.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CatalogService.Model;
 
 namespace CatalogService.BLL.Interfaces
 {
@@ -19,6 +19,6 @@ namespace CatalogService.BLL.Interfaces
 
         Task UpdateAsync(Guid id, Item item);
 
-        Task DeleteAsync(Guid id);        
+        Task DeleteAsync(Guid id);
     }
 }

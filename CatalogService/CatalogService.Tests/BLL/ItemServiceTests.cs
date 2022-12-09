@@ -1,14 +1,15 @@
-﻿using CatalogService.BLL.Interfaces;
-using CatalogService.BLL.Services;
-using CatalogService.DAL.Interfaces;
-using CatalogService.DAL.Models;
-using Moq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using CatalogService.BLL.Interfaces;
+using CatalogService.BLL.Services;
+using CatalogService.DAL.Interfaces;
+using CatalogService.DAL.Models;
+using Moq;
+
 
 namespace CatalogService.Tests
 {
@@ -55,7 +56,7 @@ namespace CatalogService.Tests
         public void AddAsync_ValidatesNullCategory()
         {
             itemService = new ItemService(repoMock.Object, mapperMock.Object, messagingServiceMock.Object);
-                        Assert.ThrowsAsync<ArgumentNullException>(() => itemService.AddAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => itemService.AddAsync(null));
         }
 
     }

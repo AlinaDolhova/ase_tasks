@@ -1,12 +1,12 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using CatalogService.BLL.Interfaces;
 using CatalogService.DAL.Interfaces;
 using CatalogService.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CatalogService.BLL.Services
 {
@@ -18,7 +18,7 @@ namespace CatalogService.BLL.Services
         public CategoryService(IGenericRepository<DAL.Models.Category> categoryRepo, IMapper mapper)
         {
             this.categoryRepository = categoryRepo;
-            this.mapper = mapper;           
+            this.mapper = mapper;
         }
 
         public async Task AddAsync(Category item)

@@ -1,13 +1,13 @@
-﻿using CatalogService.DAL.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using CatalogService.DAL.Interfaces;
 
 namespace CatalogService.DAL.Models
 {
-    public class Item: IIdentifiable, IDeletable
+    public class Item : IIdentifiable, IDeletable
     {
         [Key]
         [Required]
@@ -24,7 +24,7 @@ namespace CatalogService.DAL.Models
 
         [Required]
         public Guid CategoryId { get; set; }
-       
+
         public Category Category { get; set; }
 
         [Required]

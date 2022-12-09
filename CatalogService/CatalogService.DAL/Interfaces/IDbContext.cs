@@ -4,7 +4,7 @@ namespace CatalogService.DAL.Interfaces
 {
     public interface IDbContext
     {
-        
-       
+
+
     }
 }

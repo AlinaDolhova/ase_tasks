@@ -1,4 +1,11 @@
-﻿using CatalogService.BLL.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using CatalogService.BLL.Interfaces;
 using CatalogService.Model;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
@@ -6,13 +13,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Mime;
-using System.Threading.Tasks;
 
 namespace CatalogService.API.Controllers
 {
@@ -27,7 +27,7 @@ namespace CatalogService.API.Controllers
         {
             this.categoryService = categoryService;
             this.logger = logger;
-           
+
         }
 
         [AllowAnonymous]

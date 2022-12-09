@@ -1,28 +1,28 @@
+using System.Collections.Generic;
+using System.Net;
+using Azure.Messaging.ServiceBus;
+using CatalogService.BLL.Interfaces;
+using CatalogService.BLL.Services;
+using CatalogService.Common.MapperProfiles;
 using CatalogService.DAL;
+using CatalogService.DAL.Interfaces;
+using CatalogService.Model;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using CatalogService.BLL.Interfaces;
-using CatalogService.BLL.Services;
-using CatalogService.DAL.Interfaces;
-using RiskFirst.Hateoas;
-using CatalogService.Model;
-using Azure.Messaging.ServiceBus;
-using NSwag;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using OpenApiOAuthFlows = NSwag.OpenApiOAuthFlows;
-using NSwag.Generation.Processors.Security;
-using NSwag.AspNetCore;
-using IdentityServer4.AccessTokenValidation;
-using Microsoft.IdentityModel.Logging;
-using System.Net;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Diagnostics;
-using CatalogService.Common.MapperProfiles;
+using Microsoft.IdentityModel.Logging;
+using NSwag;
+using NSwag.AspNetCore;
+using NSwag.Generation.Processors.Security;
+using RiskFirst.Hateoas;
+using OpenApiOAuthFlows = NSwag.OpenApiOAuthFlows;
 
 namespace CatalogService.API
 {
@@ -131,12 +131,13 @@ namespace CatalogService.API
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             var apiName = Configuration.GetValue<string>("ApiName");
-            var apiSecret = Configuration.GetValue<string>("ApiSecret");                    
-            var logger = loggerFactory.CreateLogger<Startup>();           
+            var apiSecret = Configuration.GetValue<string>("ApiSecret");
+            var logger = loggerFactory.CreateLogger<Startup>();
 
             app.UseExceptionHandler(appError =>
             {
-                appError.Run(context => {
+                appError.Run(context =>
+                {
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     logger.LogError("The error has occured. Status: {status}. Details: {ex}", context.Response.StatusCode, contextFeature.Error);
                     return System.Threading.Tasks.Task.CompletedTask;
@@ -158,7 +159,7 @@ namespace CatalogService.API
                 endpoints.MapControllers();
             });
 
-            app.UseOpenApi();           
+            app.UseOpenApi();
 
             app.UseSwaggerUi3(options =>
             {

@@ -1,4 +1,6 @@
-﻿using CatalogService.Auth.Models;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using CatalogService.Auth.Models;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
@@ -6,8 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CatalogService.Auth.Data
 {

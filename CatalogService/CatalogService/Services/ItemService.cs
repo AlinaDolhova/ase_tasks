@@ -1,13 +1,13 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using CatalogService.BLL.Interfaces;
 using CatalogService.DAL.Interfaces;
 using CatalogService.DAL.Models;
 using CatalogService.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Item = CatalogService.Model.Item;
 
 namespace CatalogService.BLL.Services
@@ -57,7 +57,7 @@ namespace CatalogService.BLL.Services
         }
 
         public async Task<IEnumerable<Item>> GetAsync() => (await itemRepository.GetAllAsync(x => !x.IsDeleted)).Select(x => mapper.Map<Item>(x));
-        
+
         public async Task<IEnumerable<Item>> GetAsync(Guid categoryId, int page, int perPage)
         {
             var skipValue = page * perPage;

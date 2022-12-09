@@ -1,14 +1,14 @@
-﻿using CatalogService.BLL.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using CatalogService.BLL.Interfaces;
 using CatalogService.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Threading.Tasks;
 
 namespace CatalogService.API.Controllers
 {
@@ -66,7 +66,7 @@ namespace CatalogService.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> AddAsync(Item item)
-        {            
+        {
             try
             {
                 if (item.Id == Guid.Empty)

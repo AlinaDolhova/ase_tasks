@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using CatalogService.DAL.Models;
-using System.Linq;
 
 namespace CatalogService.Common.MapperProfiles
 {
@@ -9,7 +9,7 @@ namespace CatalogService.Common.MapperProfiles
         public CatalogProfile()
         {
             CreateMap<Category, Model.Category>()
-               // .ForMember(x => x.Items, x => x.MapFrom(y => y.Items.Select(z => z.Id)))
+                // .ForMember(x => x.Items, x => x.MapFrom(y => y.Items.Select(z => z.Id)))
                 .ReverseMap();
 
             CreateMap<Item, Model.Item>()

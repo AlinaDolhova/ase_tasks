@@ -1,6 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using CatalogService.Gateway.Aggregators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -8,19 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
+using NSwag;
+using NSwag.AspNetCore;
+using NSwag.Generation.Processors.Security;
+using Ocelot.Cache.CacheManager;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
-using Ocelot.Cache.CacheManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using NSwag;
-using NSwag.Generation.Processors.Security;
-using NSwag.AspNetCore;
-using Microsoft.AspNetCore.Http;
-using System.IO;
 
 namespace CatalogService.Gateway
 {
@@ -65,7 +65,7 @@ namespace CatalogService.Gateway
                  .AddTransientDefinedAggregator<CatalogItemsAggregator>();
 
             services.AddSwaggerDocument(x =>
-            {                
+            {
                 x.AddSecurity("oauth2", new NSwag.OpenApiSecurityScheme
                 {
                     Type = OpenApiSecuritySchemeType.OAuth2,
@@ -101,7 +101,7 @@ namespace CatalogService.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -121,7 +121,7 @@ namespace CatalogService.Gateway
             app.UseOpenApi();
             app.UseSwaggerUi3(options =>
             {
-                options.DocumentPath = "/internal/swagger.json";                
+                options.DocumentPath = "/internal/swagger.json";
                 options.OAuth2Client = new OAuth2ClientSettings
                 {
                     ClientId = apiName,

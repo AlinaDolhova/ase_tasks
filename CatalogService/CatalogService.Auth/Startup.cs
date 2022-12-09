@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using CatalogService.Auth.Data;
 using IdentityServer4.AspNetIdentity;
 using IdentityServer4.EntityFramework.DbContexts;
@@ -12,12 +18,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace CatalogService.Auth
 {
@@ -48,7 +48,7 @@ namespace CatalogService.Auth
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-                
+
 
             services.AddIdentityServer()
                 .AddAspNetIdentity<IdentityUser>()
@@ -84,7 +84,8 @@ namespace CatalogService.Auth
 
             app.UseExceptionHandler(appError =>
             {
-                appError.Run(context => {
+                appError.Run(context =>
+                {
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     logger.LogError("The error has occured. Status: {status}. Details: {ex}", context.Response.StatusCode, contextFeature.Error);
                     return Task.CompletedTask;

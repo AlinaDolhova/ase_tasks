@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json.Linq;
-using Ocelot.Middleware;
-using Ocelot.Multiplexer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,6 +6,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
+using Ocelot.Middleware;
+using Ocelot.Multiplexer;
 
 namespace CatalogService.Gateway.Aggregators
 {
@@ -19,11 +19,11 @@ namespace CatalogService.Gateway.Aggregators
         public async Task<DownstreamResponse> Aggregate(List<HttpContext> responses)
         {
             var one = JObject.Parse((await responses[0].Items.DownstreamResponse().Content.ReadAsStringAsync()));
-            var two = JObject.Parse(await responses[1].Items.DownstreamResponse().Content.ReadAsStringAsync());          
-           
+            var two = JObject.Parse(await responses[1].Items.DownstreamResponse().Content.ReadAsStringAsync());
+
 
             one.Merge(two, new JsonMergeSettings
-            {               
+            {
                 MergeArrayHandling = MergeArrayHandling.Union
             });
 

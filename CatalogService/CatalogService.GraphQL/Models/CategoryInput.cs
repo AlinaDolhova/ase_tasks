@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CatalogService.GraphQL.Models
 {
@@ -8,6 +8,6 @@ namespace CatalogService.GraphQL.Models
         public Guid Id { get; set; }
 
         public string Name { get; set; }
-       
+
     }
 }

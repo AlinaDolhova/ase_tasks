@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using AutoMapper;
 using CatalogService.BLL.Interfaces;
+using CatalogService.GraphQL.Controllers;
+using CatalogService.GraphQL.Models;
+using CatalogService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using System.Threading.Tasks;
-using CatalogService.GraphQL.Controllers;
-using AutoMapper;
-using CatalogService.Model;
-using CatalogService.GraphQL.Models;
-using System.Linq;
 
 namespace CatalogService.Tests.GraphQL
 {
@@ -83,7 +83,7 @@ namespace CatalogService.Tests.GraphQL
             var result = await categoryController.UpdateAsync(id, new CategoryInput { Id = id, Name = name });
 
             categoryServiceMock.Verify(x => x.UpdateAsync(id, It.Is<Category>(x => x.Id == id && x.Name == name)));
-        }       
+        }
 
         [Test]
         public async Task CategoryController_DeleteCategory_NotFound()

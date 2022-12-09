@@ -1,20 +1,20 @@
-﻿using CatalogService.BLL.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using AutoMapper;
+using CatalogService.BLL.Interfaces;
+using CatalogService.GraphQL.Models;
+using CatalogService.Model;
+using GraphQL.AspNet.Attributes;
 using GraphQL.AspNet.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Net.Mime;
-using System.Threading.Tasks;
-using System;
-using GraphQL.AspNet.Attributes;
-using CatalogService.Model;
-using CatalogService.GraphQL.Models;
-using AutoMapper;
-using System.Linq;
 
 namespace CatalogService.GraphQL.Controllers
-{   
+{
     [ApiController]
     public class CategoryController : GraphController
     {

@@ -1,13 +1,13 @@
-﻿using IdentityModel;
-using IdentityServer4.Extensions;
-using IdentityServer4.Models;
-using IdentityServer4.Services;
-using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using IdentityModel;
+using IdentityServer4.Extensions;
+using IdentityServer4.Models;
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace CatalogService.Auth.Services
 {
@@ -33,7 +33,7 @@ namespace CatalogService.Auth.Services
             var user = await _userMgr.FindByIdAsync(sub);
             var userClaims = await _userClaimsPrincipalFactory.CreateAsync(user);
 
-           var claims = userClaims.Claims.ToList();
+            var claims = userClaims.Claims.ToList();
             claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
 
             if (_userMgr.SupportsUserRole)
@@ -50,7 +50,7 @@ namespace CatalogService.Auth.Services
                             claims.AddRange(await _roleMgr.GetClaimsAsync(role));
                         }
                     }
-                }               
+                }
             }
 
             context.IssuedClaims = claims;
@@ -61,6 +61,6 @@ namespace CatalogService.Auth.Services
             return Task.CompletedTask;
         }
 
-       
+
     }
 }

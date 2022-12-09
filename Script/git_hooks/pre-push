@@ -1,0 +1,6 @@
+#!/bin/sh
+
+dotnet build "./CatalogService/CatalogService.sln"
+dotnet build "./CartingService/CartingService.sln"
+
+dotnet test "./CatalogService/CatalogService.sln"

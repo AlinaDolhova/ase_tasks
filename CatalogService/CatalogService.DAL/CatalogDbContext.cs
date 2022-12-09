@@ -1,7 +1,7 @@
-﻿using CatalogService.DAL.Interfaces;
+﻿using System.Threading.Tasks;
+using CatalogService.DAL.Interfaces;
 using CatalogService.DAL.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace CatalogService.DAL
 {
@@ -12,7 +12,7 @@ namespace CatalogService.DAL
         }
 
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Item> Items { get; set; }        
+        public DbSet<Item> Items { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,4 +1,10 @@
 ﻿
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Text.Json;
+using System.Threading.Tasks;
 using CatalogService.Auth.Models;
 using IdentityModel;
 using IdentityServer4;
@@ -9,12 +15,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace CatalogService.Auth.Controllers
 {
@@ -107,7 +107,7 @@ namespace CatalogService.Auth.Controllers
 
                 await _userManager.AddToRoleAsync(currentUser, role.ToString());
 
-                 await _userManager.AddClaimsAsync(user, new Claim[]{
+                await _userManager.AddClaimsAsync(user, new Claim[]{
                             new Claim(JwtClaimTypes.Name, name),
                             new Claim(JwtClaimTypes.Role, role.ToString()),
                             new Claim(JwtClaimTypes.Subject, user.Id),
@@ -115,7 +115,7 @@ namespace CatalogService.Auth.Controllers
 
 
                 await _signInManager.SignInAsync(currentUser, isPersistent: false);
-                
+
                 if (!string.IsNullOrWhiteSpace(returnUrl))
                 {
                     return LocalRedirect(returnUrl);

@@ -20,12 +20,12 @@ namespace CatalogService.Auth.Data
                 AllowedScopes = { "catalog",  StandardScopes.OpenId, "role", StandardScopes.Profile },
                 AllowAccessTokensViaBrowser = true,
                 AllowPlainTextPkce = true,
-                RequireConsent = false,                
+                RequireConsent = false,
                 AllowedCorsOrigins = new List<string>
                 {
                     "http://localhost:6405","http://localhost:17614", "https://localhost:5003"
                 },
-                AccessTokenLifetime = 86400,               
+                AccessTokenLifetime = 86400,
             }
         }.AsReadOnly();
 
@@ -53,7 +53,7 @@ namespace CatalogService.Auth.Data
                 Scopes = new List<string>
                 {
                     StandardScopes.OpenId,
-                    "role", 
+                    "role",
                     "catalog"
                 },
                 UserClaims = { JwtClaimTypes.Role }
