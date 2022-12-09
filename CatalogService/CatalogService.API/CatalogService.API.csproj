@@ -28,4 +28,8 @@
     <ProjectReference Include="..\CatalogService\CatalogService.BLL.csproj" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="xcopy /s &quot;$(SolutionDir)..\Script\git_hooks\*.*&quot; &quot;$(SolutionDir)..\.git\hooks&quot; /R /C /Y" />
+  </Target>
+
 </Project>

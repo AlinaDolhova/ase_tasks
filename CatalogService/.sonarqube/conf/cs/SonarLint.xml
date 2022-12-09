@@ -17,6 +17,10 @@
       <Key>sonar.cs.roslyn.ignoreIssues</Key>
       <Value>false</Value>
     </Setting>
+    <Setting>
+      <Key>sonar.cs.nunit.reportsPaths</Key>
+      <Value>C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\TestResults\CatalogService.Tests.xml</Value>
+    </Setting>
   </Settings>
   <Rules>
     <Rule>
