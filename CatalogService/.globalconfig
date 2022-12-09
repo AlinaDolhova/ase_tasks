@@ -3,3 +3,7 @@ is_global = true
 dotnet_style_qualification_for_method = true
 dotnet_sort_system_directives_first = true
 dotnet_diagnostic.CA1000.severity = warning
+
+indent_size = 4
+indent_style = space
+tab_width = 4

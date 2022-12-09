@@ -55,7 +55,7 @@ namespace CatalogService.Tests
         public void AddAsync_ValidatesNullCategory()
         {
             itemService = new ItemService(repoMock.Object, mapperMock.Object, messagingServiceMock.Object);
-            Assert.ThrowsAsync<ArgumentNullException>(() => itemService.AddAsync(null));
+                        Assert.ThrowsAsync<ArgumentNullException>(() => itemService.AddAsync(null));
         }
 
     }
