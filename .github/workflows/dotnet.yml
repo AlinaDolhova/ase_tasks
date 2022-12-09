@@ -20,9 +20,18 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 3.1.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
+    - name: Restore dependencies for Catalog
+      run: dotnet restore CatalogService.sln
+      working-directory: CatalogService
+    - name: Build Catalog 
+      run: dotnet build CatalogService.sln --no-restore
+      working-directory: CatalogService
+    - name: Restore dependencies for Carting
+      run: dotnet restore CartingService.sln
+      working-directory: CartingService
+    - name: Build Carting 
+      run: dotnet build CartingService.sln --no-restore
+      working-directory: CartingService
+    - name: Test Catalog
       run: dotnet test --no-build --verbosity normal
+      working-directory: CatalogService
