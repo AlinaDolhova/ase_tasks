@@ -36,7 +36,7 @@ jobs:
     - name: App Settings Variable Substitution for Catalog API
       uses: microsoft/variable-substitution@v1
       with:
-        files: '${{env.WORKING_DIRECTORY}}/appsettings.json'
+        files: '**/appsettings.json'
       env:
         ConnectionStrings.CatalogDbContext: ${{ secrets.catalog_connection_string }}        
     - name: Publish
