@@ -1,3 +1,11 @@
-﻿C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CategoryService.Model\Category.cs
-C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CategoryService.Model\Item.cs
-C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CategoryService.Model\ItemUpdatedMessage.cs
+﻿C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.DAL\CatalogDbContext.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.DAL\GenericRepository.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.DAL\Interfaces\IDbContext.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.DAL\Interfaces\IDeletable.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.DAL\Interfaces\IGenericRepository.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.DAL\Interfaces\IIdentifiable.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.DAL\Migrations\20221017135333_InitMigration.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.DAL\Migrations\20221017135333_InitMigration.Designer.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.DAL\Migrations\CatalogDbContextModelSnapshot.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.DAL\Models\Category.cs
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.DAL\Models\Item.cs

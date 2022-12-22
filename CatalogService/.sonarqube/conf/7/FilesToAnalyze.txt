@@ -9,5 +9,9 @@ C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\obj\De
 C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\appsettings.Development.json
 C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\appsettings.json
 C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Properties\launchSettings.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Properties\serviceDependencies.CatalogServiceAPI20221209175117 - Web Deploy.json
 C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Properties\serviceDependencies.json
 C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Properties\serviceDependencies.local.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Properties\ServiceDependencies\CatalogServiceAPI20221209175117 - Web Deploy\mssql1.arm.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Properties\ServiceDependencies\CatalogServiceAPI20221209175117 - Web Deploy\profile.arm.json
+C:\Users\Alina_Rudenko\source\repos\ASE\CatalogService\CatalogService.API\Properties\PublishProfiles\CatalogServiceAPI20221209175117 - Web Deploy.pubxml
